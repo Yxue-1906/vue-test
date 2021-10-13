@@ -21,19 +21,19 @@
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
           <el-form-item label="输入搜索：">
-            <el-input style="width: 203px" v-model="listQuery.keyword" placeholder="商品名称"></el-input>
+            <el-input style="width: 203px" v-model="listQuery.keyword" placeholder="课程名称"></el-input>
           </el-form-item>
-          <el-form-item label="商品货号：">
-            <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="商品货号"></el-input>
+          <el-form-item label="课程编号：">
+            <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="课程编号"></el-input>
           </el-form-item>
-          <el-form-item label="商品分类：">
+          <el-form-item label="课程分类：">
             <el-cascader
               clearable
               v-model="selectProductCateValue"
               :options="productCateOptions">
             </el-cascader>
           </el-form-item>
-          <el-form-item label="商品品牌：">
+<!--          <el-form-item label="商品品牌：">
             <el-select v-model="listQuery.brandId" placeholder="请选择品牌" clearable>
               <el-option
                 v-for="item in brandOptions"
@@ -62,7 +62,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
       </div>
     </el-card>
@@ -87,22 +87,22 @@
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="商品图片" width="120" align="center">
+<!--        <el-table-column label="商品图片" width="120" align="center">
           <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
-        </el-table-column>
-        <el-table-column label="商品名称" align="center">
+        </el-table-column>-->
+        <el-table-column label="课程名称" align="center">
           <template slot-scope="scope">
             <p>{{scope.row.name}}</p>
-            <p>品牌：{{scope.row.brandName}}</p>
+<!--            <p>品牌：{{scope.row.brandName}}</p>-->
           </template>
         </el-table-column>
-        <el-table-column label="价格/货号" width="120" align="center">
+        <el-table-column label="价格" width="120" align="center">
           <template slot-scope="scope">
             <p>价格：￥{{scope.row.price}}</p>
-            <p>货号：{{scope.row.productSn}}</p>
+<!--            <p>课程编号：{{scope.row.productSn}}</p>-->
           </template>
         </el-table-column>
-        <el-table-column label="标签" width="140" align="center">
+<!--        <el-table-column label="标签" width="140" align="center">
           <template slot-scope="scope">
             <p>上架：
               <el-switch
@@ -129,8 +129,8 @@
               </el-switch>
             </p>
           </template>
-        </el-table-column>
-        <el-table-column label="排序" width="100" align="center">
+        </el-table-column>-->
+<!--        <el-table-column label="排序" width="100" align="center">
           <template slot-scope="scope">{{scope.row.sort}}</template>
         </el-table-column>
         <el-table-column label="SKU库存" width="100" align="center">
@@ -176,7 +176,7 @@
               </el-button>
             </p>
           </template>
-        </el-table-column>
+        </el-table-column>-->
       </el-table>
     </div>
     <div class="batch-operate-container">
