@@ -3,75 +3,63 @@
     <el-card class="register-form-layout">
       <el-form autoComplete="on"
                :model="registerForm"
-               :rules="loginRules"
-               ref="loginForm"
+               :rules="registerRules"
+               ref="registerForm"
                label-position="left">
         <div style="text-align: center">
           <!--          <svg-icon icon-class="login-mall" style="width: 112px;height: 56px;color: #409EFF"></svg-icon>-->
           <img :src="logo" style="height: 90px;"/>
         </div>
         <!--        <h2 class="login-title color-main">Easy Course</h2>-->
-        <el-row type="flex">
-          <el-col>
-            <el-form-item prop="username">
-              <el-input name="username"
-                        type="text"
-                        v-model="registerForm.username"
-                        autoComplete="on"
-                        placeholder="请输入用户名">
-          <span slot="prefix">
-            <svg-icon icon-class="user" class="color-main"></svg-icon>
-          </span>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item prop="name">
-              <el-input name="name"
-                        type="text"
-                        ref="name"
-                        v-model="registerForm.name"
-                        autoComplete="on"
-                        placeholder="请输入姓名">
-          <span slot="prefix">
-            <svg-icon icon-class="user" class="color-main"></svg-icon>
-          </span>
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col>
-            <el-form-item prop="password">
-              <el-input name="password"
-                        ref="password"
-                        @keyup.enter.native="handleRegister"
-                        v-model="registerForm.password"
-                        autoComplete="on"
-                        placeholder="请输入密码"
-                        show-password>
-          <span slot="prefix">
-            <svg-icon icon-class="password" class="color-main"></svg-icon>
-          </span>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item prop="repeat_password">
-              <el-input name="repeat_password"
-                        ref="repeat_password"
-                        @keyup.enter.native="handleRegister"
-                        v-model="registerForm.repeat_password"
-                        autoComplete="on"
-                        placeholder="请重复密码"
-                        show-password>
+        <el-form-item prop="username">
+          <el-input name="username"
+                    type="text"
+                    v-model="registerForm.username"
+                    autoComplete="on"
+                    placeholder="请输入用户名">
+              <span slot="prefix">
+                <svg-icon icon-class="user" class="color-main"></svg-icon>
+              </span>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input name="name"
+                    type="text"
+                    ref="name"
+                    v-model="registerForm.name"
+                    autoComplete="on"
+                    placeholder="请输入姓名">
+              <span slot="prefix">
+                <svg-icon icon-class="user" class="color-main"></svg-icon>
+              </span>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input name="password"
+                    ref="password"
+                    @keyup.enter.native="handleRegister"
+                    v-model="registerForm.password"
+                    autoComplete="on"
+                    placeholder="请输入密码"
+                    show-password>
+              <span slot="prefix">
+                <svg-icon icon-class="password" class="color-main"></svg-icon>
+              </span>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="repeat_password">
+          <el-input name="repeat_password"
+                    ref="repeat_password"
+                    @keyup.enter.native="handleRegister"
+                    v-model="registerForm.repeat_password"
+                    autoComplete="on"
+                    placeholder="请重复密码"
+                    show-password>
           <span slot="prefix">
             <svg-icon icon-class="password" class="color-main"></svg-icon>
           </span>
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+          </el-input>
+        </el-form-item>
         <el-row type="flex">
           <el-col>
             <el-form-item prop="grade">
@@ -92,34 +80,34 @@
             </el-form-item>
           </el-col>
           <el-col>
-            <el-form-item prop="name">
-              <el-input name="name"
-                        type="text"
-                        ref="name"
-                        v-model="registerForm.name"
-                        autoComplete="on"
-                        placeholder="请输入姓名">
-          <span slot="prefix">
-            <svg-icon icon-class="user" class="color-main"></svg-icon>
-          </span>
-              </el-input>
+            <el-form-item prop="major">
+              <el-select name="major"
+                         ref="major"
+                         v-model="registerForm.major"
+                         autoComplete="on"
+                         placeholder="请选择院系">
+                <el-option v-for="major in majors"
+                           :key="major.value"
+                           :label="major.label"
+                           :value="major.value"></el-option>
+                <span slot="prefix">
+                <svg-icon icon-class="user" class="color-main"></svg-icon>
+                </span>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item style="text-align: center">
-          <!--          <el-button style="width: 45%" type="primary" :loading="loading" @click.native.prevent="handleLogin">-->
-          <!--            登录-->
-          <!--          </el-button>-->
           <el-button style="width: 45%" type="primary" @click.native.prevent="handleRegister">
             注册
           </el-button>
         </el-form-item>
         <el-form-item style="text-align: center">
-          <el-link href="/login">已有帐号?前往登录</el-link>
+          <el-link @click="$router.push({path:'/login'})">已有帐号?前往登录</el-link>
         </el-form-item>
       </el-form>
     </el-card>
-    <img :src="login_center_bg" class="login-center-layout">
+    <img :src="login_center_bg" class="register-center-layout">
   </div>
 </template>
 
@@ -161,47 +149,51 @@ export default {
       }
     }
     return {
-      grade: [
+      grades: [
         {
           value: 2018,
-          label: 2018
+          label: '2018级'
         },
         {
           value: 2019,
-          label: 2019
+          label: '2019级'
         },
         {
           value: 2020,
-          label: 2020
+          label: '2020级'
         },
         {
           value: 2021,
-          label: 2021
+          label: '2021级'
         }
       ],
-      major: [
+      majors: [
         {
-          value: 1,
-          label: 1
+          value: 2,
+          label: '自动化系'
+        },
+        {
+          value: 6,
+          label: '计算机系'
         }
       ],
       registerForm: {
         username: '',
+        name: '',
         password: '',
-        repeat_password: ''
+        repeat_password: '',
+        grade: 2018,
+        major: 6
       },
-      loginRules: {
+      registerRules: {
         username: [{required: true, trigger: 'blur', validator: validateUsername}],
         name: [{required: true, trigger: 'blur', validator: validateName}],
         password: [{required: true, trigger: 'blur', validator: validatePass}],
         repeat_password: [{required: true, trigger: 'blur', validator: validateRepeat}]
       },
       loading: false,
-      pwdType: 'password',
       login_center_bg,
       logo,
-      dialogVisible: false,
-      supportDialogVisible: false
     }
   },
   created() {
@@ -210,15 +202,8 @@ export default {
     this.registerForm.repeat_password = '';
   },
   methods: {
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
-      }
-    },
     handleRegister() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
           // let isSupport = getSupport();
           // if(isSupport===undefined||isSupport==null){
@@ -226,7 +211,7 @@ export default {
           //   return;
           // }
           this.loading = true;
-          this.$store.dispatch('Login', this.registerForm).then(() => {
+          this.$store.dispatch('Register', this.registerForm).then(() => {
             this.loading = false;
             setCookie("username", this.registerForm.username, 15);
             setCookie("password", this.registerForm.password, 15);
@@ -258,7 +243,7 @@ export default {
   text-align: center;
 }
 
-.login-center-layout {
+.register-center-layout {
   background: #409EFF;
   width: auto;
   height: auto;
