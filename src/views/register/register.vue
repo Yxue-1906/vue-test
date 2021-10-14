@@ -32,33 +32,51 @@
               </span>
           </el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input name="password"
-                    ref="password"
-                    @keyup.enter.native="handleRegister"
-                    v-model="registerForm.password"
+        <el-form-item prop="studentID">
+          <el-input name="studentID"
+                    type="text"
+                    ref="studentID"
+                    v-model="registerForm.studentID"
                     autoComplete="on"
-                    placeholder="请输入密码"
-                    show-password>
+                    placeholder="请输入学号">
               <span slot="prefix">
-                <svg-icon icon-class="password" class="color-main"></svg-icon>
+                <svg-icon icon-class="user" class="color-main"></svg-icon>
               </span>
           </el-input>
         </el-form-item>
-        <el-form-item prop="repeat_password">
-          <el-input name="repeat_password"
-                    ref="repeat_password"
-                    @keyup.enter.native="handleRegister"
-                    v-model="registerForm.repeat_password"
-                    autoComplete="on"
-                    placeholder="请重复密码"
-                    show-password>
-          <span slot="prefix">
-            <svg-icon icon-class="password" class="color-main"></svg-icon>
-          </span>
-          </el-input>
-        </el-form-item>
-        <el-row type="flex" :gutter="5">
+        <el-row type="flex" :gutter="10">
+          <el-col>
+            <el-form-item prop="password">
+              <el-input name="password"
+                        ref="password"
+                        @keyup.enter.native="handleRegister"
+                        v-model="registerForm.password"
+                        autoComplete="on"
+                        placeholder="请输入密码"
+                        show-password>
+                <span slot="prefix">
+                  <svg-icon icon-class="password" class="color-main"></svg-icon>
+                </span>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item prop="repeat_password">
+              <el-input name="repeat_password"
+                        ref="repeat_password"
+                        @keyup.enter.native="handleRegister"
+                        v-model="registerForm.repeat_password"
+                        autoComplete="on"
+                        placeholder="请重复密码"
+                        show-password>
+                <span slot="prefix">
+                  <svg-icon icon-class="password" class="color-main"></svg-icon>
+                </span>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" :gutter="10">
           <el-col>
             <el-form-item prop="grade">
               <el-select name="grade"
@@ -180,6 +198,7 @@ export default {
         name: '',
         password: '',
         repeat_password: '',
+        studentID: "",
         grade: 2018,
         major: 6
       },

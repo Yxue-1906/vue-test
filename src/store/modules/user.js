@@ -47,9 +47,10 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
-          const data = response
+          const data = response.data
           const tokenStr = data.token
           setToken(tokenStr)
+          commit('SET_USERNAME', username)
           commit('SET_TOKEN', tokenStr)
           resolve()
         }).catch(error => {
@@ -64,7 +65,7 @@ const user = {
         user_name: userInfo.username.trim(),
         password: userInfo.password,
         name: userInfo.name,
-        studentID: userInfo.id,
+        studentID: userInfo.studentID,
         grade: userInfo.grade,
         major: userInfo.major
       }
@@ -95,24 +96,31 @@ const user = {
       //   })
       // })
       return new Promise((resolve, reject) => {
-        // commit('SET_ROLES', 'admin')
-        commit('SET_NAME', 'gyp')
-        // commit('SET_AVATAR', data.icon)
-        resolve(response)
+        getInfo().then(response => {
+          const data = response.data;
+          commit('SET_NAME', data.name)
+          commit('SET_STUDENT_ID', data.studentID)
+          console.log(data.studentID)
+          commit('SET_GRADE', data.grade)
+          commit('SET_MAJOR', data.major)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
 
     // 登出
     LogOut({commit, state}) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        // logout(state.token).then(() => {
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        removeToken()
+        resolve()
+        // }).catch(error => {
+        //   reject(error)
+        // })
       })
     },
 

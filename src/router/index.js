@@ -48,7 +48,7 @@ export const asyncRouterMap = [
       component: () => import('@/views/pms/product/index'),
       meta: {title: '课程列表', icon: 'product-list'}
     },
-      {
+      /*{
         path: 'addProduct',
         name: 'addProduct',
         component: () => import('@/views/pms/product/add'),
@@ -127,10 +127,10 @@ export const asyncRouterMap = [
         component: () => import('@/views/pms/brand/update'),
         meta: {title: '编辑品牌'},
         hidden: true
-      }
+      }*/
     ]
   },
-  {
+ /* {
     path: '/oms',
     component: Layout,
     redirect: '/oms/order',
@@ -358,7 +358,7 @@ export const asyncRouterMap = [
         hidden: true
       }
     ]
-  },
+  },*/
   {path: '*', redirect: '/404', hidden: true}
 ]
 export default new Router({

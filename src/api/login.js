@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import store from '@/store/index'
 
 export function login(user_name, password) {
   return request({
@@ -25,7 +26,7 @@ export function getInfo() {
     url: '/req-stu-info',
     method: 'post',
     data: {
-      token: this.$store.user.token
+      token: store.getters.token
     }
   })
 }
@@ -36,7 +37,7 @@ export function updateInfo(data) {
     method: 'post',
     data: {
       ...data,
-      token: this.$store.user.token
+      token: store.getters.token
     }
   })
 }

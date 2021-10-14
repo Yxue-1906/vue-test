@@ -11,26 +11,28 @@ router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
     if (to.path === '/login') {
-      next({path: '/'})
+      next({path: ''})
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      if (store.getters.roles.length === 0) {
+      // if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           let menus = null;
-          let username = res.data.username;
-          store.dispatch('GenerateRoutes', {menus, username}).then(() => { // 生成可访问的路由表
-            router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
-            next({...to, replace: true})
-          })
+          let username = store.getters.username;
+          // store.dispatch('GenerateRoutes', {menus, username}).then(() => { // 生成可访问的路由表
+          //   router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
+          //   next({...to, replace: true})
+          // })
+          next()
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')
-            next({path: '/'})
+            // next({path: '/'})
+            console.log()
           })
         })
-      } else {
-        next()
-      }
+      // } else {
+      //   next()
+      // }
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
