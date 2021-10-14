@@ -361,9 +361,6 @@ export const asyncRouterMap = [
   // },
   {path: '*', redirect: '/404', hidden: true}
 ]
-console.log(asyncRouterMap[0])
-console.log(asyncRouterMap)
-console.log(asyncRouterMap[0])
 export default new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({y: 0}),
