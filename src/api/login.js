@@ -20,9 +20,24 @@ export function register(data) {
 }
 
 export function getInfo() {
+  //todo: change to method 'get'
   return request({
-    url: '/admin/info',
-    method: 'get',
+    url: '/req-stu-info',
+    method: 'post',
+    data: {
+      token: this.$store.user.token
+    }
+  })
+}
+
+export function updateInfo(data) {
+  return request({
+    url: '/edit',
+    method: 'post',
+    data: {
+      ...data,
+      token: this.$store.user.token
+    }
   })
 }
 

@@ -7,10 +7,8 @@
                ref="registerForm"
                label-position="left">
         <div style="text-align: center">
-          <!--          <svg-icon icon-class="login-mall" style="width: 112px;height: 56px;color: #409EFF"></svg-icon>-->
           <img :src="logo" style="height: 90px;"/>
         </div>
-        <!--        <h2 class="login-title color-main">Easy Course</h2>-->
         <el-form-item prop="username">
           <el-input name="username"
                     type="text"
@@ -60,7 +58,7 @@
           </span>
           </el-input>
         </el-form-item>
-        <el-row type="flex">
+        <el-row type="flex" :gutter="5">
           <el-col>
             <el-form-item prop="grade">
               <el-select name="grade"
@@ -213,9 +211,8 @@ export default {
           this.loading = true;
           this.$store.dispatch('Register', this.registerForm).then(() => {
             this.loading = false;
-            setCookie("username", this.registerForm.username, 15);
-            setCookie("password", this.registerForm.password, 15);
-            this.$router.push({path: '/'})
+            this.$message({message: "注册成功!", type: "success"})
+            this.$router.push({path: '/login'})
           }).catch(() => {
             this.loading = false
           })

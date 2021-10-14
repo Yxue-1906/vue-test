@@ -28,9 +28,9 @@ service.interceptors.response.use(
      * code为非200是抛错 可结合自己业务进行修改
      */
     const res = response
-    if (res.data.info !== '') {
+    if (res.data.code !== 200) {
       Message({
-        message: res.message,
+        message: res.data.message,
         type: 'error',
         duration: 3 * 1000
       })

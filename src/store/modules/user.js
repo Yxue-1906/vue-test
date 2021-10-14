@@ -1,27 +1,44 @@
 import {login, register, logout, getInfo} from '@/api/login'
 import {getToken, setToken, removeToken} from '@/utils/auth'
+import {Message, MessageBox} from 'element-ui'
 
 const user = {
   state: {
     token: getToken(),
+    username: '',
     name: '',
-    avatar: '',
-    roles: []
+    studentID: '',
+    grade: '',
+    major: '',
+    // avatar: '',
+    // roles: []
   },
 
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
+    SET_USERNAME: (state, username) => {
+      state.username = username
+    },
     SET_NAME: (state, name) => {
       state.name = name
     },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
+    SET_STUDENT_ID: (state, studentID) => {
+      state.studentID = studentID
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-    }
+    SET_GRADE: (state, grade) => {
+      state.grade = grade
+    },
+    SET_MAJOR: (state, major) => {
+      state.major = major
+    },
+    // SET_AVATAR: (state, avatar) => {
+    //   state.avatar = avatar
+    // },
+    // SET_ROLES: (state, roles) => {
+    //   state.roles = roles
+    // }
   },
 
   actions: {
@@ -31,14 +48,11 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response
-          console.log(response)
           const tokenStr = data.token
           setToken(tokenStr)
           commit('SET_TOKEN', tokenStr)
-
           resolve()
         }).catch(error => {
-          console.log(error);
           reject(error)
         })
       })
@@ -56,10 +70,6 @@ const user = {
       }
       return new Promise((resolve, reject) => {
         register(userData).then(response => {
-          const data = response.data
-          const tokenStr = data.tokenHead + data.token
-          setToken(tokenStr)
-          commit('SET_TOKEN', tokenStr)
           resolve()
         }).catch(error => {
           reject(error)
@@ -69,20 +79,26 @@ const user = {
 
     // 获取用户信息
     GetInfo({commit, state}) {
+      // return new Promise((resolve, reject) => {
+      //   getInfo().then(response => {
+      //     const data = response.data
+      //     if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+      //       commit('SET_ROLES', data.roles)
+      //     } else {
+      //       reject('getInfo: roles must be a non-null array !')
+      //     }
+      //     commit('SET_NAME', data.username)
+      //     commit('SET_AVATAR', data.icon)
+      //     resolve(response)
+      //   }).catch(error => {
+      //     reject(error)
+      //   })
+      // })
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const data = response.data
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
-          commit('SET_NAME', data.username)
-          commit('SET_AVATAR', data.icon)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        // commit('SET_ROLES', 'admin')
+        commit('SET_NAME', 'gyp')
+        // commit('SET_AVATAR', data.icon)
+        resolve(response)
       })
     },
 
