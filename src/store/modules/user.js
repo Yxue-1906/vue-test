@@ -50,6 +50,7 @@ const user = {
           const data = response.data
           const tokenStr = data.token
           setToken(tokenStr)
+          console.log("setusername")
           commit('SET_USERNAME', username)
           commit('SET_TOKEN', tokenStr)
           resolve()

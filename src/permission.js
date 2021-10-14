@@ -14,15 +14,15 @@ router.beforeEach((to, from, next) => {
       next({path: ''})
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      // if (store.getters.roles.length === 0) {
+      if (store.getters.name == null || store.getters.name === '') {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           let menus = null;
           let username = store.getters.username;
-          // store.dispatch('GenerateRoutes', {menus, username}).then(() => { // 生成可访问的路由表
-          //   router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
-          //   next({...to, replace: true})
-          // })
-          next()
+          store.dispatch('GenerateRoutes', {menus, username}).then(() => { // 生成可访问的路由表
+            router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
+            next({...to, replace: true})
+          })
+          // next()
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')
@@ -30,9 +30,9 @@ router.beforeEach((to, from, next) => {
             console.log()
           })
         })
-      // } else {
-      //   next()
-      // }
+      } else {
+        next()
+      }
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
