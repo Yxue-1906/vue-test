@@ -147,27 +147,6 @@
           }
         });
       },
-      getBrandList() {
-        fetchBrandList({pageNum: 1, pageSize: 100}).then(response => {
-          this.brandOptions = [];
-          let brandList = response.data.list;
-          for (let i = 0; i < brandList.length; i++) {
-            this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
-          }
-        });
-      },
-      getCateNameById(id){
-        let name=null;
-        for(let i=0;i<this.productCateOptions.length;i++){
-          for(let j=0;j<this.productCateOptions[i].children.length;j++){
-            if(this.productCateOptions[i].children[j].value===id){
-              name=this.productCateOptions[i].children[j].label;
-              return name;
-            }
-          }
-        }
-        return name;
-      },
       handleNext(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
