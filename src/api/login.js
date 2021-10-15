@@ -33,7 +33,7 @@ export function getInfo() {
 
 export function updateInfo(data) {
   return request({
-    url: '/edit',
+    url: '/edit-info',
     method: 'post',
     data: {
       ...data,

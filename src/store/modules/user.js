@@ -1,5 +1,6 @@
-import {login, register, logout, getInfo} from '@/api/login'
-import {getToken, setToken, removeToken} from '@/utils/auth'
+import {login, register, logout, getInfo, updateInfo} from '../../api/login'
+import {getToken, setToken, removeToken} from '../../utils/auth'
+import {getCookie, removeCookie, setCookie} from "../../utils/support";
 import {Message, MessageBox} from 'element-ui'
 
 const user = {
@@ -18,9 +19,6 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_USERNAME: (state, username) => {
-      state.username = username
-    },
     SET_NAME: (state, name) => {
       state.name = name
     },
@@ -33,12 +31,6 @@ const user = {
     SET_MAJOR: (state, major) => {
       state.major = major
     },
-    // SET_AVATAR: (state, avatar) => {
-    //   state.avatar = avatar
-    // },
-    // SET_ROLES: (state, roles) => {
-    //   state.roles = roles
-    // }
   },
 
   actions: {
@@ -50,8 +42,7 @@ const user = {
           const data = response.data
           const tokenStr = data.token
           setToken(tokenStr)
-          console.log("setusername")
-          commit('SET_USERNAME', username)
+          setCookie('username', username)
           commit('SET_TOKEN', tokenStr)
           resolve()
         }).catch(error => {
@@ -101,13 +92,24 @@ const user = {
           const data = response.data;
           commit('SET_NAME', data.name)
           commit('SET_STUDENT_ID', data.studentID)
-          console.log(data.studentID)
           commit('SET_GRADE', data.grade)
           commit('SET_MAJOR', data.major)
+          removeCookie('needUpdate')
           resolve()
         }).catch(error => {
           reject(error)
         })
+      })
+    },
+
+    UpdateInfo({commit}, data) {
+      return new Promise((resolve, reject) => {
+        updateInfo(data).then(response => {
+          resolve()
+          setCookie("needUpdate", 1)
+        })
+      }).catch(error => {
+        reject(error)
       })
     },
 

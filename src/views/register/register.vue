@@ -222,11 +222,6 @@ export default {
     handleRegister() {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
-          // let isSupport = getSupport();
-          // if(isSupport===undefined||isSupport==null){
-          //   this.dialogVisible =true;
-          //   return;
-          // }
           this.loading = true;
           this.$store.dispatch('Register', this.registerForm).then(() => {
             this.loading = false;

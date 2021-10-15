@@ -107,7 +107,6 @@ const permission = {
       // })
       return new Promise(resolve => {
         const { username } = data;
-        console.log(asyncRouterMap);
         const accessedRouters = asyncRouterMap;
         //对菜单进行排序
         sortRouters(accessedRouters);

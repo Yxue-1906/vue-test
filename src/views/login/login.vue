@@ -65,15 +65,10 @@ export default {
       }
     };
     const validatePass = (rule, value, callback) => {
-      if (value.length < 3) {
-        callback(new Error('密码不能小于3位'))
-      } else {
-        callback()
-      }
-    };
-    const validateRepeat = (rule, value, callback) => {
-      if (value !== this.loginForm.password) {
-        callback(new Error('两次输入的密码不一致'))
+      if (value.length < 6) {
+        callback(new Error('密码不能小于6位'))
+      } else if (value.length > 16) {
+        callback(new Error('密码长度应小于16位'))
       } else {
         callback()
       }
@@ -82,7 +77,6 @@ export default {
       loginForm: {
         username: '',
         password: '',
-
       },
       loginRules: {
         username: [{required: true, trigger: 'blur', validator: validateUsername}],
@@ -98,7 +92,7 @@ export default {
   },
   created() {
     this.loginForm.username = getCookie("username");
-    this.loginForm.password = getCookie("password");
+    this.loginForm.password = '';
     this.loginForm.username = '';
     this.loginForm.password = '';
   },

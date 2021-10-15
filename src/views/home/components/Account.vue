@@ -1,13 +1,17 @@
 <template>
-  <el-form>
+  <el-form :model="user" :rules="updateRules" ref="updateForm"
+           :label-width="'150'" size="mini" class="update_form">
     <el-form-item label="Username">
       <el-input v-model.trim="user.username" :disabled="true"/>
     </el-form-item>
     <el-form-item label="Name">
       <el-input v-model.trim="user.name"/>
     </el-form-item>
-    <el-form-item label="New Password">
-      <el-input v-model.trim="user.new_password"/>
+    <el-form-item label="New Password" prop="password">
+      <el-input v-model="user.password" show-password/>
+    </el-form-item>
+    <el-form-item label="Repeat Password" prop="repeat_new_password">
+      <el-input v-model="user.repeat_new_password" show-password/>
     </el-form-item>
     <el-form-item label="Student ID">
       <el-input v-model.trim="user.studentID"/>
@@ -25,30 +29,95 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+import {getCookie} from "../../../utils/support";
+
 export default {
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          username: '',
-          name: '',
-          new_password: '',
-          studentID: '',
-          grade: 0,
-          major: 0
-        }
+  data() {
+    const validatePass = (rule, value, callback) => {
+      if (value.length < 6 && value.length !== 0) {
+        callback(new Error('密码不能小于6位'))
+      } else {
+        callback()
+      }
+    };
+    const validateRepeat = (rule, value, callback) => {
+      console.log("rps")
+      console.log(value)
+      console.log(this.user.password)
+      if (value !== this.user.password) {
+        callback(new Error('两次输入的密码不一致'))
+      } else {
+        callback()
+      }
+    };
+    return {
+      user: {
+        username: '',
+        name: '',
+        password: '',
+        repeat_new_password: '',
+        studentID: '',
+        grade: 0,
+        major: 0
+      },
+      updateRules: {
+        new_password: [{trigger: 'blur', validator: validatePass}],
+        repeat_new_password: [{trigger: 'blur', validator: validateRepeat}]
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      "name",
+      "studentID",
+      "grade",
+      "major"
+    ])
+  },
+  created() {
+    this.user.username = getCookie('username')
+    this.user.name = this.name;
+    this.user.studentID = this.studentID;
+    this.user.password = '';
+    this.user.repeat_new_password = '';
+    this.user.grade = this.grade;
+    this.user.major = this.major;
+  },
   methods: {
     submit() {
-      this.$message({
-        message: 'User information has been updated successfully',
-        type: 'success',
-        duration: 3 * 1000
+      this.$refs.updateForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          if (!this.user.password) {
+            delete this.user.password
+          }
+          delete this.user.repeat_new_password
+          this.$store.dispatch("UpdateInfo", this.user).then(() => {
+            this.loading = false;
+            this.$message({
+              message: '用户信息更新成功!',
+              type: 'success',
+              duration: 3 * 1000
+            })
+          }).catch(error => {
+            this.loading = false;
+          })
+        } else {
+          this.$message({
+            message: '输入不符合要求',
+            type: 'error',
+            duration: 3 * 1000
+          })
+          return false;
+        }
       })
     }
   }
 }
 </script>
+<style>
+.update_form {
+  width: 40%;
+}
+</style>
