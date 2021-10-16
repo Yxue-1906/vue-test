@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="app-container">
     <el-card class="filter-container" shadow="never">
       <div>
@@ -9,7 +9,7 @@
           @click="handleSearchList()"
           type="primary"
           size="small">
-          查询结果
+          查询
         </el-button>
         <el-button
           style="float: right;margin-right: 15px"
@@ -24,10 +24,10 @@
             <el-input style="width: 203px" v-model="listQuery.crsName" placeholder="课程名称"></el-input>
           </el-form-item>
           <el-form-item label="可选年级：">
-            <el-input style="width: 203px" v-model="listQuery.crsGrade" placeholder="可选年级"></el-input>
+            <el-input style="width: 203px" type="number" v-model="listQuery.crsGrade" placeholder="可选年级"></el-input>
           </el-form-item>
           <el-form-item label="可选专业：">
-            <el-input style="width: 203px" v-model="listQuery.crsMajor" placeholder="可选专业"></el-input>
+            <el-input style="width: 203px" type="number" v-model="listQuery.crsMajor" placeholder="可选专业"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -50,7 +50,7 @@
                 v-loading="listLoading"
                 border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="100" align="center">
+        <el-table-column label="课程编号" width="100" align="center">
           <template slot-scope="scope">{{ scope.row.courseID }}</template>
         </el-table-column>
         <el-table-column label="教师名称" align="center">
