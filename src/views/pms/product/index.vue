@@ -26,12 +26,8 @@
           <el-form-item label="课程编号：">
             <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="课程编号"></el-input>
           </el-form-item>
-          <el-form-item label="课程分类：">
-            <el-cascader
-              clearable
-              v-model="selectProductCateValue"
-              :options="productCateOptions">
-            </el-cascader>
+          <el-form-item label="教师：">
+            <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="课程编号"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -41,7 +37,7 @@
       <span>数据列表</span>
       <el-button
         class="btn-add"
-        @click="handleAddProduct()"
+        @click="addVisible = true"
         size="mini">
         添加
       </el-button>
@@ -55,7 +51,7 @@
                 border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{ scope.row.id }}</template>
+          <template slot-scope="scope">{{ scope.row.courseID }}</template>
         </el-table-column>
         <el-table-column label="教师名称" align="center">
           <template slot-scope="scope">
@@ -64,16 +60,17 @@
         </el-table-column>
         <el-table-column label="出售者" width="120" align="center">
           <template slot-scope="scope">
-            <p>价格：￥{{ scope.row.seller }}</p>
+            <p>{{ scope.row.seller_username }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="出售者学号" width="120" align="center">
-          <template slot-scope="scope">
-            <p>价格：￥{{ scope.row.sellerID }}</p>
-          </template>
-        </el-table-column>
+        <!--        <el-table-column label="出售者学号" width="120" align="center">-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <p>价格：￥{{ scope.row.sellerID }}</p>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
       </el-table>
     </div>
+
     <!--    <div class="batch-operate-container">-->
     <!--      <el-select-->
     <!--        size="small"-->
@@ -106,10 +103,26 @@
     <!--        :total="total">-->
     <!--      </el-pagination>-->
     <!--    </div>-->
+    <el-dialog title="添加出售" :visible.sync="addVisible">
+      <el-form :model="addForm">
+        <el-form-item label="课程编号" :label-width="'120px'">
+          <el-input v-model="addForm.crsID" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="教师" :label-width="'120px'">
+          <el-input v-model="addForm.teacher" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleAddProduct">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
+
 </template>
 <script>
 import {fetchAllSales} from '@/api/product'
+import {addSale} from "../../../api/product";
 // import {fetchList as fetchSkuStockList, update as updateSkuStockList} from '@/api/skuStock'
 // import {fetchList as fetchProductAttrList} from '@/api/productAttr'
 // import {fetchList as fetchBrandList} from '@/api/brand'
@@ -128,6 +141,7 @@ export default {
       list: null,
       total: null,
       listLoading: true,
+      addVisible: false,
       // selectProductCateValue: null,
       // multipleSelection: [],
       // productCateOptions: [],
@@ -139,10 +153,16 @@ export default {
       //   value: 0,
       //   label: '下架'
       // }],
+      addForm: {
+        crsID: "",
+        teacher: "",
+      }
     }
   },
   created() {
     this.getList();
+    this.addForm.crsID = '';
+    this.addForm.teacher = '';
   },
   watch: {
     //   selectProductCateValue: function (newValue) {
@@ -166,26 +186,35 @@ export default {
     getList() {
       this.listLoading = true;
       fetchAllSales(this.listQuery).then(response => {
+        console.log(response)
         this.listLoading = false;
-        data = response.data;
-        for (let i = 0; i < data.crsIDs.length; ++i) {
-          this.list.append({
-            "id": data.crsIDs[i],
-            "teacher": data.teachers[i],
-            "seller": data.sellers_name[i],
-            "sellerID": data.sellerIDs[i]
-          })
-        }
-        // this.list = response.data.list;
+        // for (let i = 0; i < data.crsIDs.length; ++i) {
+        //   this.list.append({
+        //     "id": data.crsIDs[i],
+        //     "teacher": data.teachers[i],
+        //     "seller": data.sellers_name[i],
+        //     "sellerID": data.sellerIDs[i]
+        //   })
+        // }
+        this.list = response.data.items;
+        console.log(this.list)
         this.total = this.list.length;
       });
     },
     handleSearchList() {
       this.getList();
     },
-    // handleAddProduct() {
-    //   this.$router.push({path: '/pms/addProduct'});
-    // },
+    handleAddProduct() {
+      // this.$router.push({path: '/pms/addProduct'});
+      addSale(this.addForm).then(() => {
+        this.addVisible = false;
+        this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
+        location.reload()
+      }).catch(error => {
+        this.addVisible = false;
+        this.$message({message: "error", type: "error"})
+      })
+    },
     // handleCurrentChange(val) {
     //   this.listQuery.pageNum = val;
     //   this.getList();

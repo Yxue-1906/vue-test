@@ -9,6 +9,17 @@ export function fetchList(params) {
   })
 }
 
+export function addSale(data){
+  return request({
+    url:'/course/add',
+    method:'post',
+    data:{
+      ...data,
+      token:store.getters.token
+    }
+  })
+}
+
 export function fetchAllSales(data) {
   return request({
     url: '/course/all-sale',
