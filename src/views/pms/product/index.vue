@@ -20,14 +20,14 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="输入搜索：">
-            <el-input style="width: 203px" v-model="listQuery.keyword" placeholder="课程名称"></el-input>
+          <el-form-item label="课程名称：">
+            <el-input style="width: 203px" v-model="listQuery.crsName" placeholder="课程名称"></el-input>
           </el-form-item>
-          <el-form-item label="课程编号：">
-            <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="课程编号"></el-input>
+          <el-form-item label="可选年级：">
+            <el-input style="width: 203px" v-model="listQuery.crsGrade" placeholder="可选年级"></el-input>
           </el-form-item>
-          <el-form-item label="教师：">
-            <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="课程编号"></el-input>
+          <el-form-item label="可选专业：">
+            <el-input style="width: 203px" v-model="listQuery.crsMajor" placeholder="可选专业"></el-input>
           </el-form-item>
         </el-form>
       </div>
