@@ -24,10 +24,10 @@
             <el-input style="width: 203px" v-model="listQuery.crsName" placeholder="课程名称"></el-input>
           </el-form-item>
           <el-form-item label="可选年级：">
-            <el-input style="width: 203px" type="number" v-model="listQuery.crsGrade" placeholder="可选年级"></el-input>
+            <el-input style="width: 203px"  v-model.number="addForm.crsGrade" placeholder="可选年级"></el-input>
           </el-form-item>
           <el-form-item label="可选专业：">
-            <el-input style="width: 203px" type="number" v-model="listQuery.crsMajor" placeholder="可选专业"></el-input>
+            <el-input style="width: 203px"  v-model.number="listQuery.crsMajor" placeholder="可选专业"></el-input>
           </el-form-item>
         </el-form>
       </div>
