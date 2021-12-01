@@ -1,46 +1,7 @@
 import request from '@/utils/request'
 import store from '@/store/index'
 
-export function login(user_name, password) {
-  return request({
-    url: '/log-in',
-    method: 'post',
-    data: {
-      user_name,
-      password
-    }
-  })
-}
 
-export function register(data) {
-  return request({
-    url: '/register',
-    method: 'post',
-    data: data
-  })
-}
-
-export function getInfo() {
-  //todo: change to method 'get'
-  return request({
-    url: '/req-stu-info',
-    method: 'post',
-    data: {
-      token: store.getters.token
-    }
-  })
-}
-
-export function updateInfo(data) {
-  return request({
-    url: '/edit-info',
-    method: 'post',
-    data: {
-      ...data,
-      token: store.getters.token
-    }
-  })
-}
 
 export function logout() {
   return request({
@@ -59,19 +20,19 @@ export function fetchList(params) {
 
 export function createAdmin(data) {
   return request({
-    url: '/admin/register',
+    url: '/admin/create-admin',
     method: 'post',
     data: data
   })
 }
 
-export function updateAdmin(id, data) {
-  return request({
-    url: '/admin/update/' + id,
-    method: 'post',
-    data: data
-  })
-}
+// export function updateAdmin(id, data) {
+//   return request({
+//     url: '/admin/update/' + id,
+//     method: 'post',
+//     data: data
+//   })
+// }
 
 export function updateStatus(id, params) {
   return request({

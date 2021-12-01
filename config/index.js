@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/': {
-        target: 'http://129.154.48.85:8080',
+        target: 'http://server.xypan.online:8080',
         changeOrigin: true,
       }
     },

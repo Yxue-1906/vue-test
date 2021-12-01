@@ -1,7 +1,6 @@
-import {login, register, logout, getInfo, updateInfo} from '../../api/login'
+import {login, register, logout, getInfo, updateInfo} from '../../api/user'
 import {getToken, setToken, removeToken} from '../../utils/auth'
 import {getCookie, removeCookie, setCookie} from "../../utils/support";
-import {Message, MessageBox} from 'element-ui'
 
 const user = {
   state: {

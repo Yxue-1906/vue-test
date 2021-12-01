@@ -110,13 +110,12 @@ export default {
             this.loading = false;
             this.$router.push({path: '/'})
           }).catch(() => {
-            this.loading = false
+            this.loading = false;
           })
         } else {
           console.log('参数验证不合法！');
           return false
         }
-
       })
     }
   }
