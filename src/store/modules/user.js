@@ -1,4 +1,4 @@
-import {login, register, logout, getInfo, updateInfo, getStuInfo} from '../../api/user'
+import {login, register, logout, updateStuInfo, getStuInfo} from '../../api/user'
 import {getToken, setToken, removeToken} from '../../utils/auth'
 import {getCookie, removeCookie, setCookie} from "../../utils/support";
 import {stat} from "copy-webpack-plugin/dist/utils/promisify";
@@ -13,7 +13,7 @@ const user = {
     major: -1,
     // avatar: '',
     authority: -1,
-    update: false,
+    update: true,
   },
 
   mutations: {
@@ -48,7 +48,8 @@ const user = {
         login(username, userInfo.password).then(response => {
           const data = response.data
           const authority = data.authority;
-          setToken(tokenStr)
+          setToken(data.token);
+          console.log(data);
           // setCookie('username', username)
           // commit('SET_TOKEN', tokenStr); //提交了一个mutation, tokenStr是它的payload
           //todo: move to GetInfo
@@ -98,7 +99,7 @@ const user = {
       //   })
       // })
       return new Promise((resolve, reject) => {
-        if (this.state.authority === 0 || this.state.authority === 2) {
+        if (this.authority < 2) {
           commit('SET_NAME', this.state.authority === 0 ? "Super Admin" : "Admin");
           commit('SET_STUDENT_ID', "00000000");
           commit('SET_GRADE', 9999);
@@ -106,6 +107,7 @@ const user = {
           commit('SET_UPDATE', false);
           resolve();
         } else {
+          console.log("jfkdlsj");
           getStuInfo().then(response => {
             const data = response.data;
             commit('SET_NAME', data.name)
@@ -123,7 +125,7 @@ const user = {
 
     UpdateInfo({commit}, data) {
       return new Promise((resolve, reject) => {
-        updateInfo(data).then(response => {
+        updateStuInfo(data).then(response => {
           //todo: travel through all words
           resolve()
           setCookie("needUpdate", 1)

@@ -76,7 +76,7 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({commit}, data) {
+    GenerateRoutes({commit}, username) {
       // return new Promise(resolve => {
       //   const { menus } = data;
       //   const { username } = data;
@@ -106,9 +106,8 @@ const permission = {
       //   resolve();
       // })
       return new Promise(resolve => {
-        const {username} = data;
         const accessedRouters = asyncRouterMap.filter(v => {
-          //todo:
+          return v;//todo: forbid admin panel
         })
         //对菜单进行排序
         sortRouters(accessedRouters);

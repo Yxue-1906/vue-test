@@ -21,9 +21,8 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.update) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
-          let menus = null;
           let username = store.getters.username;
-          store.dispatch('GenerateRoutes', {menus, username}).then(() => { // 生成可访问的路由表
+          store.dispatch('GenerateRoutes', username).then(() => { // 生成可访问的路由表
             router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
             next({...to, replace: true})
           })
