@@ -1,6 +1,7 @@
-import {login, register, logout, getInfo, updateInfo} from '../../api/user'
+import {login, register, logout, getInfo, updateInfo, getStuInfo} from '../../api/user'
 import {getToken, setToken, removeToken} from '../../utils/auth'
 import {getCookie, removeCookie, setCookie} from "../../utils/support";
+import {stat} from "copy-webpack-plugin/dist/utils/promisify";
 
 const user = {
   state: {
@@ -8,16 +9,17 @@ const user = {
     username: '',
     name: '',
     studentID: '',
-    grade: '',
-    major: '',
+    grade: -1,
+    major: -1,
     // avatar: '',
-    // roles: []
+    authority: -1,
+    update: false,
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
-    },
+    // SET_TOKEN: (state, token) => {
+    //   state.token = token
+    // },
     SET_NAME: (state, name) => {
       state.name = name
     },
@@ -30,6 +32,12 @@ const user = {
     SET_MAJOR: (state, major) => {
       state.major = major
     },
+    SET_AUTHORITY: (state, authority) => {
+      state.authority = authority;
+    },
+    SET_UPDATE: (state, update) => {
+      state.update = update;
+    }
   },
 
   actions: {
@@ -39,10 +47,13 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response.data
-          const tokenStr = data.token
+          const authority = data.authority;
           setToken(tokenStr)
-          setCookie('username', username)
-          commit('SET_TOKEN', tokenStr)
+          // setCookie('username', username)
+          // commit('SET_TOKEN', tokenStr); //提交了一个mutation, tokenStr是它的payload
+          //todo: move to GetInfo
+          commit('SET_AUTHORITY', authority);
+          commit('SET_UPDATE', true);
           resolve()
         }).catch(error => {
           reject(error)
@@ -50,24 +61,24 @@ const user = {
       })
     },
 
-    //注册
-    Register({commit}, userInfo) {
-      const userData = {
-        user_name: userInfo.username.trim(),
-        password: userInfo.password,
-        name: userInfo.name,
-        studentID: userInfo.studentID,
-        grade: userInfo.grade,
-        major: userInfo.major
-      }
-      return new Promise((resolve, reject) => {
-        register(userData).then(response => {
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
+    // //注册
+    // Register({commit}, userInfo) {
+    //   const userData = {
+    //     user_name: userInfo.username.trim(),
+    //     password: userInfo.password,
+    //     name: userInfo.name,
+    //     studentID: userInfo.studentID,
+    //     grade: userInfo.grade,
+    //     major: userInfo.major
+    //   }
+    //   return new Promise((resolve, reject) => {
+    //     register(userData).then(response => {
+    //       resolve()
+    //     }).catch(error => {
+    //       reject(error)
+    //     })
+    //   })
+    // },
 
     // 获取用户信息
     GetInfo({commit, state}) {
@@ -87,23 +98,33 @@ const user = {
       //   })
       // })
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const data = response.data;
-          commit('SET_NAME', data.name)
-          commit('SET_STUDENT_ID', data.studentID)
-          commit('SET_GRADE', data.grade)
-          commit('SET_MAJOR', data.major)
-          removeCookie('needUpdate')
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        if (this.state.authority === 0 || this.state.authority === 2) {
+          commit('SET_NAME', this.state.authority === 0 ? "Super Admin" : "Admin");
+          commit('SET_STUDENT_ID', "00000000");
+          commit('SET_GRADE', 9999);
+          commit('SET_MAJOR', 1);
+          commit('SET_UPDATE', false);
+          resolve();
+        } else {
+          getStuInfo().then(response => {
+            const data = response.data;
+            commit('SET_NAME', data.name)
+            commit('SET_STUDENT_ID', data.studentID)
+            commit('SET_GRADE', data.grade)
+            commit('SET_MAJOR', data.major)
+            commit('SET_UPDATE', false)
+            resolve()
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
 
     UpdateInfo({commit}, data) {
       return new Promise((resolve, reject) => {
         updateInfo(data).then(response => {
+          //todo: travel through all words
           resolve()
           setCookie("needUpdate", 1)
         })

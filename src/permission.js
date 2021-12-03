@@ -8,15 +8,18 @@ import {getCookie, removeCookies} from "./utils/support";
 import {removeToken} from "./utils/auth"; // 验权
 
 const whiteList = ['/register', '/login'] // 不重定向白名单
+// 3457
+// 使用默认名字从router import了生成的路由器
+// 这里定义了全局路由守卫
 router.beforeEach((to, from, next) => {
   console.log(to.path)
   NProgress.start()
   if (getToken()) {
-    if (to.path === '/login') {
+    if (to.path in whiteList) {
       next({path: ''})
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      if (store.getters.name == null || store.getters.name === '' || getCookie('needUpdate')) {
+      if (store.getters.update) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           let menus = null;
           let username = store.getters.username;

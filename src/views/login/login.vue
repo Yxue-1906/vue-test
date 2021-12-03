@@ -40,7 +40,7 @@
           </el-button>
         </el-form-item>
         <el-form-item style="text-align: center">
-          <el-link @click="$router.push({path:'/register'})">没有账号?前往注册</el-link>
+          <el-link @click="$router.replace({path:'/register'})">没有账号?前往注册</el-link>
         </el-form-item>
       </el-form>
     </el-card>

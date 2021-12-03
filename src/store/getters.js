@@ -7,7 +7,8 @@ const getters = {
   studentID: state => state.user.studentID,
   grade: state => state.user.grade,
   major: state => state.user.major,
-  // roles: state => state.user.roles,
+  authority: state => state.user.authority,
+  update: state => state.user.update,
   addRouters: state => state.permission.addRouters,
   routers: state => state.permission.routers
 }

@@ -7,6 +7,7 @@ import getters from './getters'
 
 Vue.use(Vuex)
 
+//有三个储存状态的容器
 const store = new Vuex.Store({
   modules: {
     app,

@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 import store from '@/store/index'
 
-export function login(user_name, password) {
+export function login(username, password) {
   return request({
     url: '/log-in',
     method: 'post',
     data: {
-      user_name,
+      username,
       password
     }
   })
@@ -14,7 +14,7 @@ export function login(user_name, password) {
 
 export function register(data) {
   return request({
-    url: '/student/register',
+    url: '/register',
     method: 'post',
     data: data
   })

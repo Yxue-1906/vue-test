@@ -44,6 +44,18 @@
               </span>
           </el-input>
         </el-form-item>
+        <el-form-item prop="phone">
+          <el-input name="phone"
+                    type="text"
+                    ref="phone"
+                    v-model="registerForm.phone"
+                    autoComplete="on"
+                    placeholder="请输入手机号">
+              <span slot="prefix">
+                <svg-icon icon-class="user" class="color-main"></svg-icon>
+              </span>
+          </el-input>
+        </el-form-item>
         <el-row type="flex" :gutter="10">
           <el-col>
             <el-form-item prop="password">
@@ -119,7 +131,7 @@
           </el-button>
         </el-form-item>
         <el-form-item style="text-align: center">
-          <el-link @click="$router.push({path:'/login'})">已有帐号?前往登录</el-link>
+          <el-link @click="$router.replace({path:'/login'})">已有帐号?前往登录</el-link>
         </el-form-item>
       </el-form>
     </el-card>
@@ -132,6 +144,7 @@ import {isvalidUsername} from '@/utils/validate';
 import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
 import login_center_bg from '@/assets/images/login_center_bg.png';
 import logo from '@/assets/images/logo.jpg'
+import {register} from "../../api/user";
 
 export default {
   name: 'register',
@@ -199,6 +212,7 @@ export default {
         password: '',
         repeat_password: '',
         studentID: "",
+        phone: "",
         grade: 2018,
         major: 6
       },
@@ -223,10 +237,18 @@ export default {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch('Register', this.registerForm).then(() => {
+          var registerData = this.registerForm;
+          delete registerData.repeat_password;
+          new Promise((resolve, reject) => {
+            register(registerData).then(response => {
+              resolve()
+            }).catch(error => {
+              reject(error)
+            })
+          }).then(() => {
             this.loading = false;
             this.$message({message: "注册成功!", type: "success"})
-            this.$router.push({path: '/login'})
+            this.$router.replace({path: '/login'});
           }).catch(() => {
             this.loading = false
           })
