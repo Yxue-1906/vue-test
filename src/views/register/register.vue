@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="register-page">
     <el-card class="register-form-layout">
       <el-form autoComplete="on"
                :model="registerForm"
@@ -264,12 +264,19 @@ export default {
 </script>
 
 <style scoped>
+/*.register-page {*/
+/*  min-height: 1000px;*/
+/*}*/
+
 .register-form-layout {
   position: absolute;
+  top: 0;
   left: 0;
+  bottom: 0;
   right: 0;
   width: 360px;
-  margin: 140px auto;
+  max-height: 620px;
+  margin: auto;
   border-top: 10px solid #409EFF;
 }
 
@@ -283,6 +290,6 @@ export default {
   height: auto;
   max-width: 100%;
   max-height: 100%;
-  margin-top: 200px;
+  margin-top: 250px;
 }
 </style>

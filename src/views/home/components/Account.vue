@@ -16,15 +16,15 @@
     <el-form-item label="Student ID">
       <el-input v-model.trim="user.studentID"/>
     </el-form-item>
-    <el-form-item label="Grade">
-      <el-select name="Grade"
+    <el-form-item prop="grade" label="Grade">
+      <el-select name="grade"
                  ref="grade"
                  v-model="user.grade"
                  autocomplete="on"></el-select>
       <el-option v-for="grade in grades"
                  :key="grade.value"
                  :label="grade.label"
-                 :value
+                 :value="grade.value"></el-option>
     </el-form-item>
     <el-form-item label="Major">
       <el-input v-model.trim="user.major"/>
@@ -56,6 +56,24 @@ export default {
       }
     };
     return {
+      grades: [
+        {
+          value: 2018,
+          label: '2018级'
+        },
+        {
+          value: 2019,
+          label: '2019级'
+        },
+        {
+          value: 2020,
+          label: '2020级'
+        },
+        {
+          value: 2021,
+          label: '2021级'
+        }
+      ],
       user: {
         username: this.$store.getters.username,
         name: '',
