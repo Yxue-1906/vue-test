@@ -285,11 +285,16 @@ export default {
 }
 
 .register-center-layout {
+  position: absolute;
+  z-index: -1;
   background: #409EFF;
+  top: 0;
+  bottom: 0;
   width: auto;
   height: auto;
   max-width: 100%;
   max-height: 100%;
-  margin-top: 250px;
+  /*margin-top: 250px;*/
+  margin: auto;
 }
 </style>

@@ -4,22 +4,9 @@
       <div>
         <i class="el-icon-search"></i>
         <span>筛选搜索</span>
-        <el-button
-          style="float: right"
-          @click="handleSearchList()"
-          type="primary"
-          size="small">
-          查询
-        </el-button>
-        <el-button
-          style="float: right;margin-right: 15px"
-          @click="handleResetSearch()"
-          size="small">
-          重置
-        </el-button>
       </div>
       <div style="margin-top: 15px">
-        <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
+        <el-form :inline="true" :model="listQuery" size="small" label-width="100px">
           <el-form-item label="课程名称：">
             <el-input style="width: 203px" v-model="listQuery.crsName" placeholder="课程名称"></el-input>
           </el-form-item>
@@ -28,6 +15,27 @@
           </el-form-item>
           <el-form-item label="可选专业：">
             <el-input style="width: 203px" v-model.number="listQuery.crsMajor" placeholder="可选专业"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-row>
+              <el-form-item>
+                <el-button
+                  style="float: right"
+                  @click="handleSearchList()"
+                  type="primary"
+                  size="small">
+                  查询
+                </el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  style="float: right;margin-right: 15px"
+                  @click="handleResetSearch()"
+                  size="small">
+                  重置
+                </el-button>
+              </el-form-item>
+            </el-row>
           </el-form-item>
         </el-form>
       </div>
@@ -182,17 +190,17 @@ export default {
     getList() {
       this.listLoading = true;
       //todo:
-      const queryAttr = this.listQuery.
-      getSellingList(this.listQuery).then(response => {
+      let queryAttr = {};
+      if (this.listQuery.crsName == null || this.listQuery.crsName === "") {
+        queryAttr.course_name = '';
+      } else {
+        queryAttr.course_name = this.listQuery.crsName;
+      }
+      queryAttr.course_major = this.listQuery.crsMajor;
+      queryAttr.course_grade = this.listQuery.crsGrade;
+      queryAttr.year = 0;
+      getSellingList(queryAttr).then(response => {
         this.listLoading = false;
-        // for (let i = 0; i < data.crsIDs.length; ++i) {
-        //   this.list.append({
-        //     "id": data.crsIDs[i],
-        //     "teacher": data.teachers[i],
-        //     "seller": data.sellers_name[i],
-        //     "sellerID": data.sellerIDs[i]
-        //   })
-        // }
         this.list = response.data.items;
         console.log(this.list)
         this.total = this.list.length;

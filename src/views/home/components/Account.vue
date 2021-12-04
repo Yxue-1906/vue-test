@@ -20,14 +20,22 @@
       <el-select name="grade"
                  ref="grade"
                  v-model="user.grade"
-                 autocomplete="on"></el-select>
-      <el-option v-for="grade in grades"
-                 :key="grade.value"
-                 :label="grade.label"
-                 :value="grade.value"></el-option>
+                 autocomplete="on">
+        <el-option v-for="grade in grades"
+                   :key="grade.value"
+                   :label="grade.label"
+                   :value="grade.value"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="Major">
-      <el-input v-model.trim="user.major"/>
+      <el-select name="major"
+                 ref="major"
+                 v-model="user.major">
+        <el-option v-for="major in majors"
+                   :key="major.major_id"
+                   :label="major.major_name"
+                   :value="major.major_id"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit">Update</el-button>
@@ -38,6 +46,7 @@
 <script>
 import {mapGetters} from "vuex";
 import {getCookie} from "../../../utils/support";
+import {getMajors} from "../../../api/user";
 
 export default {
   data() {
@@ -74,6 +83,7 @@ export default {
           label: '2021级'
         }
       ],
+      majors: [],
       user: {
         username: this.$store.getters.username,
         name: '',
@@ -104,6 +114,14 @@ export default {
     this.user.studentID = this.studentID;
     this.user.grade = this.grade;
     this.user.major = this.major;
+    new Promise((resolve, reject) => {
+      getMajors().then(response => {
+        this.majors = response.data.items;
+      })
+      resolve();
+    }).catch(err => {
+      reject(err);
+    });
   },
   methods: {
     submit() {

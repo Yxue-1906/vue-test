@@ -129,8 +129,9 @@ export default {
   left: 0;
   bottom: 0;
   right: 0;
+  max-height: 400px;
   width: 360px;
-  margin: 170px auto;
+  margin: auto;
   border-top: 10px solid #409EFF;
 }
 
@@ -139,11 +140,16 @@ export default {
 }
 
 .login-center-layout {
+  position: absolute;
+  z-index: -1;
   background: #409EFF;
+  top: 0;
+  bottom: 0;
   width: auto;
   height: auto;
   max-width: 100%;
   max-height: 100%;
-  margin-top: 250px;
+  /*margin-top: 250px;*/
+  margin: auto;
 }
 </style>
