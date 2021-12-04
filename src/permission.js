@@ -12,7 +12,6 @@ const whiteList = ['/register', '/login'] // 不重定向白名单
 // 使用默认名字从router import了生成的路由器
 // 这里定义了全局路由守卫
 router.beforeEach((to, from, next) => {
-  console.log(to.path)
   NProgress.start()
   if (getToken()) {
     if (to.path in whiteList) {

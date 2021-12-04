@@ -24,10 +24,10 @@
             <el-input style="width: 203px" v-model="listQuery.crsName" placeholder="课程名称"></el-input>
           </el-form-item>
           <el-form-item label="可选年级：">
-            <el-input style="width: 203px"  v-model.number="addForm.crsGrade" placeholder="可选年级"></el-input>
+            <el-input style="width: 203px" v-model.number="addForm.crsGrade" placeholder="可选年级"></el-input>
           </el-form-item>
           <el-form-item label="可选专业：">
-            <el-input style="width: 203px"  v-model.number="listQuery.crsMajor" placeholder="可选专业"></el-input>
+            <el-input style="width: 203px" v-model.number="listQuery.crsMajor" placeholder="可选专业"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -121,12 +121,8 @@
 
 </template>
 <script>
-import {fetchAllSales} from '@/api/product'
+import {getSellingList} from '../../../api/trade'
 import {addSale} from "../../../api/product";
-// import {fetchList as fetchSkuStockList, update as updateSkuStockList} from '@/api/skuStock'
-// import {fetchList as fetchProductAttrList} from '@/api/productAttr'
-// import {fetchList as fetchBrandList} from '@/api/brand'
-// import {fetchListWithChildren} from '@/api/productCate'
 
 const defaultListQuery = {
   crsName: "",
@@ -185,8 +181,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      fetchAllSales(this.listQuery).then(response => {
-        console.log(response)
+      //todo:
+      const queryAttr = this.listQuery.
+      getSellingList(this.listQuery).then(response => {
         this.listLoading = false;
         // for (let i = 0; i < data.crsIDs.length; ++i) {
         //   this.list.append({

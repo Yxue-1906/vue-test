@@ -11,12 +11,18 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-  console.log(config);
   if (getToken()) {
     // config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-    config.data = {
-      token: getToken(),
-      ...config.data
+    const whiteList = ['/all-majors', '/trade/all-selling'];
+    if (!(config.url in whiteList)) {
+      config.data = {
+        token: getToken(),
+        ...config.data
+      }
+    } else {
+      config.data = {
+        ...config.data
+      }
     }
   }
   return config;

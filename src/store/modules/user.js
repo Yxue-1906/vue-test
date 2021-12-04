@@ -23,6 +23,9 @@ const user = {
     SET_NAME: (state, name) => {
       state.name = name
     },
+    SET_USERNAME: (state, username) => {
+      state.username = username
+    },
     SET_STUDENT_ID: (state, studentID) => {
       state.studentID = studentID
     },
@@ -83,21 +86,6 @@ const user = {
 
     // 获取用户信息
     GetInfo({commit, state}) {
-      // return new Promise((resolve, reject) => {
-      //   getInfo().then(response => {
-      //     const data = response.data
-      //     if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-      //       commit('SET_ROLES', data.roles)
-      //     } else {
-      //       reject('getInfo: roles must be a non-null array !')
-      //     }
-      //     commit('SET_NAME', data.username)
-      //     commit('SET_AVATAR', data.icon)
-      //     resolve(response)
-      //   }).catch(error => {
-      //     reject(error)
-      //   })
-      // })
       return new Promise((resolve, reject) => {
         if (this.authority < 2) {
           commit('SET_NAME', this.state.authority === 0 ? "Super Admin" : "Admin");
@@ -107,9 +95,9 @@ const user = {
           commit('SET_UPDATE', false);
           resolve();
         } else {
-          console.log("jfkdlsj");
           getStuInfo().then(response => {
             const data = response.data;
+            commit('SET_USERNAME', data.username);
             commit('SET_NAME', data.name)
             commit('SET_STUDENT_ID', data.studentID)
             commit('SET_GRADE', data.grade)
@@ -127,8 +115,8 @@ const user = {
       return new Promise((resolve, reject) => {
         updateStuInfo(data).then(response => {
           //todo: travel through all words
+          commit("SET_UPDATE", true);
           resolve()
-          setCookie("needUpdate", 1)
         })
       }).catch(error => {
         reject(error)

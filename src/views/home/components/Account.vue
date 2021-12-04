@@ -1,6 +1,6 @@
 <template>
   <el-form :model="user" :rules="updateRules" ref="updateForm"
-           :label-width="'150'" size="mini" class="update_form">
+           label-width="130px" size="mini" class="update_form" label-position="right">
     <el-form-item label="Username">
       <el-input v-model.trim="user.username" :disabled="true"/>
     </el-form-item>
@@ -11,13 +11,20 @@
       <el-input v-model="user.password" show-password/>
     </el-form-item>
     <el-form-item label="Repeat Password" prop="repeat_new_password">
-      <el-input v-model="user.repeat_new_password" show-password/>
+      <el-input v-model="repeat" show-password/>
     </el-form-item>
     <el-form-item label="Student ID">
       <el-input v-model.trim="user.studentID"/>
     </el-form-item>
     <el-form-item label="Grade">
-      <el-input v-model.trim="user.grade"/>
+      <el-select name="Grade"
+                 ref="grade"
+                 v-model="user.grade"
+                 autocomplete="on"></el-select>
+      <el-option v-for="grade in grades"
+                 :key="grade.value"
+                 :label="grade.label"
+                 :value
     </el-form-item>
     <el-form-item label="Major">
       <el-input v-model.trim="user.major"/>
@@ -42,9 +49,6 @@ export default {
       }
     };
     const validateRepeat = (rule, value, callback) => {
-      console.log("rps")
-      console.log(value)
-      console.log(this.user.password)
       if (value !== this.user.password) {
         callback(new Error('两次输入的密码不一致'))
       } else {
@@ -53,14 +57,14 @@ export default {
     };
     return {
       user: {
-        username: '',
+        username: this.$store.getters.username,
         name: '',
         password: '',
-        repeat_new_password: '',
         studentID: '',
         grade: 0,
         major: 0
       },
+      repeat: "",
       updateRules: {
         new_password: [{trigger: 'blur', validator: validatePass}],
         repeat_new_password: [{trigger: 'blur', validator: validateRepeat}]
@@ -69,6 +73,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "username",
       "name",
       "studentID",
       "grade",
@@ -76,11 +81,9 @@ export default {
     ])
   },
   created() {
-    this.user.username = getCookie('username')
+    this.user.username = this.username;
     this.user.name = this.name;
     this.user.studentID = this.studentID;
-    this.user.password = '';
-    this.user.repeat_new_password = '';
     this.user.grade = this.grade;
     this.user.major = this.major;
   },
@@ -118,6 +121,6 @@ export default {
 </script>
 <style>
 .update_form {
-  width: 40%;
+  width: 400px;
 }
 </style>

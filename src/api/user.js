@@ -22,7 +22,7 @@ export function register(data) {
 
 export function getStuInfo() {
   return request({
-    url: '/req-stu-info',
+    url: '/my-info',
     method: 'post',
   })
 }
@@ -32,5 +32,13 @@ export function updateStuInfo(data) {
     url: '/edit-info',
     method: 'post',
     data: data
+  })
+}
+
+export function getMajors() {
+  return request({
+    url: '/all-majors',
+    method: 'post',
+    data: {}
   })
 }

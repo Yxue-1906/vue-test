@@ -115,9 +115,9 @@
                          autoComplete="on"
                          placeholder="请选择院系">
                 <el-option v-for="major in majors"
-                           :key="major.value"
-                           :label="major.label"
-                           :value="major.value"></el-option>
+                           :key="major.major_id"
+                           :label="major.major_name"
+                           :value="major.major_id"></el-option>
                 <span slot="prefix">
                 <svg-icon icon-class="user" class="color-main"></svg-icon>
                 </span>
@@ -144,7 +144,7 @@ import {isvalidUsername} from '@/utils/validate';
 import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
 import login_center_bg from '@/assets/images/login_center_bg.png';
 import logo from '@/assets/images/logo.jpg'
-import {register} from "../../api/user";
+import {register, getMajors} from "../../api/user";
 
 export default {
   name: 'register',
@@ -196,16 +196,7 @@ export default {
           label: '2021级'
         }
       ],
-      majors: [
-        {
-          value: 2,
-          label: '自动化系'
-        },
-        {
-          value: 6,
-          label: '计算机系'
-        }
-      ],
+      majors: [],
       registerForm: {
         username: '',
         name: '',
@@ -213,8 +204,8 @@ export default {
         repeat_password: '',
         studentID: "",
         phone: "",
-        grade: 2018,
-        major: 6
+        grade: "",
+        major: "",
       },
       registerRules: {
         username: [{required: true, trigger: 'blur', validator: validateUsername}],
@@ -231,6 +222,16 @@ export default {
     this.registerForm.username = '';
     this.registerForm.password = '';
     this.registerForm.repeat_password = '';
+    this.registerForm.grade = "";
+    this.registerForm.major = "";
+    new Promise((resolve, reject) => {
+      getMajors().then(response => {
+        this.majors = response.data.items;
+      })
+      resolve();
+    }).catch(err => {
+      reject(err);
+    })
   },
   methods: {
     handleRegister() {
