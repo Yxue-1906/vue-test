@@ -10,7 +10,7 @@ export function getSellingList(queryAttr) {
 
 export function addSelling(courseData) {
   return request({
-    url: '',
+    url: 'trading/add-selling',
     method: 'post',
     data: courseData
   })

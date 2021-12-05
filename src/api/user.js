@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import store from '@/store/index'
 
 export function login(username, password) {
   return request({
@@ -35,10 +34,3 @@ export function updateStuInfo(data) {
   })
 }
 
-export function getMajors() {
-  return request({
-    url: '/all-majors',
-    method: 'post',
-    data: {}
-  })
-}

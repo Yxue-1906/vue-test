@@ -113,7 +113,7 @@
                          ref="major"
                          v-model="registerForm.major"
                          autoComplete="on"
-                         placeholder="请选择院系">
+                         placeholder="请选择专业">
                 <el-option v-for="major in majors"
                            :key="major.major_id"
                            :label="major.major_name"
@@ -144,7 +144,8 @@ import {isvalidUsername} from '@/utils/validate';
 import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
 import login_center_bg from '@/assets/images/login_center_bg.png';
 import logo from '@/assets/images/logo.jpg'
-import {register, getMajors} from "../../api/user";
+import {register} from "../../api/user";
+import {getMajors} from "../../api/info";
 
 export default {
   name: 'register',
@@ -238,7 +239,7 @@ export default {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          var registerData = this.registerForm;
+          let registerData = this.registerForm;
           delete registerData.repeat_password;
           new Promise((resolve, reject) => {
             register(registerData).then(response => {

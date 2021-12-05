@@ -26,7 +26,7 @@
 import Account from './components/Account'
 
 export default {
-  name: 'home',
+  name: 'user',
   components: {Account},
 }
 </script>

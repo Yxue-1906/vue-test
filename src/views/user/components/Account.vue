@@ -46,7 +46,7 @@
 <script>
 import {mapGetters} from "vuex";
 import {getCookie} from "../../../utils/support";
-import {getMajors} from "../../../api/user";
+import {getMajors} from "../../../api/info";
 
 export default {
   data() {

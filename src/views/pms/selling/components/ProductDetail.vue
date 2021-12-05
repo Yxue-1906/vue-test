@@ -40,7 +40,7 @@
   import ProductSaleDetail from './ProductSaleDetail';
   import ProductAttrDetail from './ProductAttrDetail';
   import ProductRelationDetail from './ProductRelationDetail';
-  import {createProduct,getProduct,updateProduct} from '@/api/product';
+  import {createProduct,getProduct,updateProduct} from '@/api/selling';
 
   const defaultProductParam = {
     albumPics: '',
