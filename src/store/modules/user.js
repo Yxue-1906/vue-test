@@ -13,6 +13,7 @@ const user = {
     major: -1,
     // avatar: '',
     authority: -1,
+    account: -1,
     update: true,
   },
 
@@ -37,6 +38,9 @@ const user = {
     },
     SET_AUTHORITY: (state, authority) => {
       state.authority = authority;
+    },
+    SET_ACCOUNT: (state, account) => {
+      state.account = account;
     },
     SET_UPDATE: (state, update) => {
       state.update = update;
@@ -97,6 +101,7 @@ const user = {
         } else {
           getStuInfo().then(response => {
             const data = response.data;
+            commit('SET_ACCOUNT', data.account);
             commit('SET_USERNAME', data.username);
             commit('SET_NAME', data.name)
             commit('SET_STUDENT_ID', data.studentID)

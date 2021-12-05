@@ -43,8 +43,8 @@ export const asyncRouterMap = [
     name: 'pms',
     meta: {title: '出售', icon: 'product'},
     children: [{
-      path: 'product',
-      name: 'product',
+      path: 'selling',
+      name: 'selling',
       component: () => import('@/views/pms/selling/index'),
       meta: {title: '所有出售', icon: 'selling-list'}
     },

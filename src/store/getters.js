@@ -1,3 +1,5 @@
+import {stat} from "copy-webpack-plugin/dist/utils/promisify";
+
 const getters = {
   sidebar: state => state.app.sidebar,
   // device: state => state.app.device,
@@ -9,6 +11,7 @@ const getters = {
   grade: state => state.user.grade,
   major: state => state.user.major,
   authority: state => state.user.authority,
+  account: state => state.user.account,
   update: state => state.user.update,
   addRouters: state => state.permission.addRouters,
   routers: state => state.permission.routers

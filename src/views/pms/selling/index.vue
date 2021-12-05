@@ -71,7 +71,7 @@
                 v-loading="listLoading"
                 border>
         <el-table-column label="课程名称" min-width="40%" align="center">
-          <template slot-scope="scope">{{ scope.row.course.courseID }}</template>
+          <template slot-scope="scope">{{ scope.row.course.name }}</template>
         </el-table-column>
         <el-table-column label="开课教师" min-width="20%" align="center">
           <template slot-scope="scope">
@@ -100,6 +100,7 @@
                          @click="handleBuy(scope.row)">购买
               </el-button>
               <el-button size="mini"
+                         v-if="hasPermission(scope.row)"
                          @click="handleDeleteSelling(scope.row)">删除
               </el-button>
             </p>
@@ -166,9 +167,12 @@
         <el-form-item label="开课年份" :label-width="'120px'">
           <el-select v-model.number="searchCourseData.year"
                      filterable
+                     remote
                      clearable
+                     :remote-method="handleQueryByYear"
+                     @change="updateCourseDetail"
                      placeholder="请选择开课年份">
-            <el-option v-for="year in years"
+            <el-option v-for="year in new Set(courses.map(e=>e.year))"
                        :key="year"
                        :label="year"
                        :value="year"></el-option>
@@ -184,8 +188,7 @@
 
 </template>
 <script>
-import {getSellingList} from '../../../api/trade'
-import {addSelling} from "../../../api/trade";
+import {buySelling, addSelling, getSellingList} from '../../../api/trade'
 import {getCourse, getMajors} from "../../../api/info";
 
 const defaultSellingQuery = {
@@ -266,6 +269,13 @@ export default {
         // this.total = this.list.length;
       });
     },
+    hasPermission(item) {
+      console.log(item);
+      console.log(this.$store.getters.account);
+      if (this.$store.getters.authority < 2)
+        return true;
+      return item.Account === this.$store.getters.account;
+    },
     handleQueryByName(name) {
       this.handleGetCoursesDetail({...this.searchCourseData, name: name});
     },
@@ -285,13 +295,35 @@ export default {
       this.handleGetCoursesDetail({...this.searchCourseData, year: year});
     },
     updateCourseDetail() {
+      if (!Number.isInteger(this.searchCourseData.year))
+        delete this.searchCourseData.year
+      if (!Number.isInteger(this.searchCourseData.major))
+        delete this.searchCourseData.major;
+      if (!Number.isInteger(this.searchCourseData.grade))
+        delete this.searchCourseData.grade;
       getCourse(this.searchCourseData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
+        if (this.courses.length === 1) {
+          let course = this.courses[0];
+          this.searchCourseData.name = course.name;
+          this.searchCourseData.grade = course.grade;
+          this.searchCourseData.major = course.major;
+          this.searchCourseData.teacher = course.teacher;
+          this.searchCourseData.year = course.year;
+        }
       })
     },
     handleGetCoursesDetail(queryData) {
       getCourse(queryData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
+        if (this.courses.length === 1) {
+          let course = this.courses[0];
+          this.searchCourseData.name = course.name;
+          this.searchCourseData.grade = course.grade;
+          this.searchCourseData.major = course.major;
+          this.searchCourseData.teacher = course.teacher;
+          this.searchCourseData.year = course.year;
+        }
       })
     },
     handleSearchList() {
@@ -307,13 +339,13 @@ export default {
         this.$message({message: "您提供的课程信息有误, 请检查后重新添加.", type: "error"});
         return;
       }
-      addSelling(this.addForm).then(() => {
+      addSelling({courseID: this.courses[0].course_id}).then(() => {
         this.addVisible = false;
         this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
         location.reload()
       }).catch(error => {
         this.addVisible = false;
-        this.$message({message: "error", type: "error"})
+        // this.$message({message: "error", type: "error"})
       })
     },
     handleResetSearch() {
@@ -331,9 +363,13 @@ export default {
         this.updateDeleteStatus(1, ids);
       });
     },
-    handleShowProduct(index, row) {
-      console.log("handleShowProduct", row);
-    },
+    handleBuy(item) {
+      console.log(item);
+      buySelling({account: item.Account, courseID: item.course.course_id}).then(() => {
+        this.$message({message: "购买成功!", type: "success", duration: 2 * 1000})
+        location.reload();
+      })
+    }
     //   updateDeleteStatus(deleteStatus, ids) {
     //     let params = new URLSearchParams();
     //     params.append('ids', ids);

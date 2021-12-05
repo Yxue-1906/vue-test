@@ -15,3 +15,11 @@ export function addSelling(courseData) {
     data: courseData
   })
 }
+
+export function buySelling(sellingData) {
+  return request({
+    url: '/order/purchase',
+    method: 'post',
+    data: sellingData
+  })
+}
