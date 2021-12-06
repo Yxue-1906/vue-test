@@ -2,49 +2,41 @@
   <div class="app-container">
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
-      <span>我的出售</span>
+      <span>我的求课</span>
       <el-button
         class="btn-add"
         @click="addVisible = true"
         size="mini">
-        添加出售
+        添加求课
       </el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="sellingTable"
-                :data="sellingList"
+                :data="askingList"
                 style="width: 100%"
                 v-loading="listLoading"
                 border>
         <el-table-column label="课程名称" min-width="40%" align="center">
-          <template slot-scope="scope">{{ scope.row.course.name }}</template>
+          <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
         <el-table-column label="开课教师" min-width="20%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.teacher }}</p>
+            <p>{{ scope.row.teacher }}</p>
           </template>
         </el-table-column>
         <el-table-column label="可选年级" min-width="10%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.grade }}</p>
+            <p>{{ scope.row.grade }}</p>
           </template>
         </el-table-column>
         <el-table-column label="可选专业" min-width="10%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.grade }}</p>
-          </template>
-        </el-table-column>
-        <el-table-column label="出售者" min-width="10%" align="center">
-          <template slot-scope="scope">
-            <p>{{ scope.row.username }}</p>
+            <p>{{ scope.row.grade }}</p>
           </template>
         </el-table-column>
         <el-table-column label="操作" min-width="10%" align="center">
           <template slot-scope="scope">
             <p>
-              <el-button size="mini"
-                         @click="handleBuy(scope.row)">购买
-              </el-button>
               <el-button size="mini"
                          v-if="hasPermission(scope.row)"
                          @click="handleDeleteSelling(scope.row)">删除
@@ -55,7 +47,7 @@
       </el-table>
     </div>
 
-    <el-dialog title="添加出售" :visible.sync="addVisible">
+    <el-dialog title="添加求课" :visible.sync="addVisible">
       <el-form :model="searchCourseData">
         <el-form-item label="课程名称" :label-width="'120px'">
           <el-select v-model="searchCourseData.name"
@@ -134,8 +126,8 @@
 
 </template>
 <script>
-import {addSelling, getMySellingList, deleteSelling} from '../../../api/trade'
 import {getCourse, getMajors} from "../../../api/info";
+import {addAsking, deleteAsking, getMyAskingList} from "../../../api/ask";
 
 const defaultCourseQuery = {
   grade: 0,
@@ -148,7 +140,7 @@ export default {
   name: "courseList",
   data() {
     return {
-      sellingList: null,
+      askingList: null,
       total: null,
       listLoading: true,
       addVisible: false,
@@ -202,9 +194,9 @@ export default {
   methods: {
     getMyList() {
       this.listLoading = true;
-      getMySellingList().then(response => {
+      getMyAskingList().then(response => {
         this.listLoading = false;
-        this.sellingList = response.data.items;
+        this.askingList = response.data.items;
         // this.total = this.list.length;
       });
     },
@@ -273,7 +265,7 @@ export default {
         this.$message({message: "您提供的课程信息有误, 请检查后重新添加.", type: "error"});
         return;
       }
-      addSelling({courseID: this.courses[0].course_id}).then(() => {
+      addAsking({courseID: this.courses[0].course_id}).then(() => {
         this.addVisible = false;
         this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
         location.reload()
@@ -288,25 +280,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteSelling({courseID: row.course.course_id}).then(() => {
+        deleteAsking({courseID: row.course.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
           location.reload();
         })
       });
     },
-    //   updateDeleteStatus(deleteStatus, ids) {
-    //     let params = new URLSearchParams();
-    //     params.append('ids', ids);
-    //     params.append('deleteStatus', deleteStatus);
-    //     updateDeleteStatus(params).then(response => {
-    //       this.$message({
-    //         message: '删除成功',
-    //         type: 'success',
-    //         duration: 1000
-    //       });
-    //     });
-    //     this.getList();
-    //   }
   }
 }
 

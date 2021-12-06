@@ -8,11 +8,35 @@ export function getAskingList(queryAttr) {
   })
 }
 
-export function getMySellingList() {
+export function getMyAskingList() {
   return request({
     url: '/trading/my-requiring',
     method: 'post',
     data: {}
   })
 }
-exp
+
+
+export function addAsking(courseData) {
+  return request({
+    url: '/trading/add-requiring',
+    method: 'post',
+    data: courseData
+  })
+}
+
+export function deleteAsking(courseData) {
+  return request({
+    url: '/trading/delete-requiring',
+    method: 'post',
+    data: courseData
+  })
+}
+
+export function fulfillAsking(askingData) {
+  return request({
+    url: '/order/transfer',
+    method: 'post',
+    data: askingData
+  })
+}

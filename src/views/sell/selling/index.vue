@@ -350,7 +350,6 @@ export default {
       })
     },
     handleResetSearch() {
-      this.selectProductCateValue = [];
       this.sellingQuery = Object.assign({}, defaultSellingQuery);
     },
     handleDeleteSelling(row) {
@@ -372,19 +371,6 @@ export default {
         location.reload();
       })
     }
-    //   updateDeleteStatus(deleteStatus, ids) {
-    //     let params = new URLSearchParams();
-    //     params.append('ids', ids);
-    //     params.append('deleteStatus', deleteStatus);
-    //     updateDeleteStatus(params).then(response => {
-    //       this.$message({
-    //         message: '删除成功',
-    //         type: 'success',
-    //         duration: 1000
-    //       });
-    //     });
-    //     this.getList();
-    //   }
   }
 }
 
