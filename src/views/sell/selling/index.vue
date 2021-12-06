@@ -85,7 +85,7 @@
         </el-table-column>
         <el-table-column label="可选专业" min-width="10%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.grade }}</p>
+            <p>{{ scope.row.course.major }}</p>
           </template>
         </el-table-column>
         <el-table-column label="出售者" min-width="10%" align="center">

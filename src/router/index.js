@@ -58,24 +58,23 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/oms',
+    path: '/ask',
     component: Layout,
-    redirect: '/oms/order',
-    name: 'oms',
-    meta: {title: '订单', icon: 'order'},
+    redirect: '/oms/ask',
+    name: 'ask',
+    meta: {title: '求课', icon: 'product'},
     children: [
       {
-        path: 'order',
-        name: 'order',
-        component: () => import('@/views/oms/order/index'),
-        meta: {title: '订单列表', icon: 'selling-list'}
+        path: 'asking',
+        name: 'asking',
+        component: () => import('../views/ask/asking/index'),
+        meta: {title: '所有求课', icon: 'selling-list'}
       },
       {
-        path: 'orderDetail',
-        name: 'orderDetail',
-        component: () => import('@/views/oms/order/orderDetail'),
-        meta: {title: '订单详情'},
-        hidden: true
+        path: 'my-asking',
+        name: 'my-asking',
+        component: () => import('../views/ask/my-asking/index'),
+        meta: {title: '我的求课', icon: 'selling-list'}
       },
     ]
   },
