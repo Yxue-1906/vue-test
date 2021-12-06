@@ -189,8 +189,8 @@
 
 </template>
 <script>
-import {getCourse, getMajors} from "../../../api/info";
-import {deleteAsking, fulfillAsking, getAskingList} from "../../../api/ask";
+import {getCourse, getMajors} from "../../api/info";
+import {deleteAsking, fulfillAsking, getAskingList} from "../../api/ask";
 
 const defaultAskingQuery = {
   course_name: "",

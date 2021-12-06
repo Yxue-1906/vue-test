@@ -41,19 +41,19 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/sell/selling',
     name: 'sell',
-    meta: {title: '出售', icon: 'product'},
+    meta: {title: '交易', icon: 'product'},
     children: [
       {
         path: 'selling',
         name: 'selling',
-        component: () => import('@/views/sell/selling/index'),
+        component: () => import('../views/trade/all-selling'),
         meta: {title: '所有出售', icon: 'selling-list'}
       },
       {
         path: 'my-selling',
         name: 'my-selling',
-        component: () => import('@/views/sell/my-selling/index'),
-        meta: {title: '我的出售', icon: 'selling-list'}
+        component: () => import('../views/trade/my-selling'),
+        meta: {title: '我不要的', icon: 'selling-list'}
       }
     ]
   },
@@ -67,14 +67,14 @@ export const asyncRouterMap = [
       {
         path: 'asking',
         name: 'asking',
-        component: () => import('../views/ask/asking/index'),
+        component: () => import('../views/ask/all-asking'),
         meta: {title: '所有求课', icon: 'selling-list'}
       },
       {
         path: 'my-asking',
         name: 'my-asking',
-        component: () => import('../views/ask/my-asking/index'),
-        meta: {title: '我的求课', icon: 'selling-list'}
+        component: () => import('../views/ask/my-asking'),
+        meta: {title: '我想要的', icon: 'selling-list'}
       },
     ]
   },
