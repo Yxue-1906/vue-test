@@ -17,34 +17,26 @@
                 v-loading="listLoading"
                 border>
         <el-table-column label="课程名称" min-width="40%" align="center">
-          <template slot-scope="scope">{{ scope.row.course.name }}</template>
+          <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
         <el-table-column label="开课教师" min-width="20%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.teacher }}</p>
+            <p>{{ scope.row.teacher }}</p>
           </template>
         </el-table-column>
         <el-table-column label="可选年级" min-width="10%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.grade }}</p>
+            <p>{{ scope.row.grade }}</p>
           </template>
         </el-table-column>
         <el-table-column label="可选专业" min-width="10%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.grade }}</p>
+            <p>{{ scope.row.major }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="出售者" min-width="10%" align="center">
-          <template slot-scope="scope">
-            <p>{{ scope.row.username }}</p>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" min-width="10%" align="center">
+        <el-table-column label="操作" min-width="20%" align="center">
           <template slot-scope="scope">
             <p>
-              <el-button size="mini"
-                         @click="handleBuy(scope.row)">购买
-              </el-button>
               <el-button size="mini"
                          v-if="hasPermission(scope.row)"
                          @click="handleDeleteSelling(scope.row)">删除
@@ -208,10 +200,8 @@ export default {
         // this.total = this.list.length;
       });
     },
-    hasPermission(item) {
-      if (this.$store.getters.authority < 2)
-        return true;
-      return item.Account === this.$store.getters.account;
+    hasPermission(course) {
+      return true;
     },
     handleQueryByName(name) {
       this.handleGetCoursesDetail({...this.searchCourseData, name: name});
