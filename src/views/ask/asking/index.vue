@@ -65,8 +65,8 @@
       </el-button>
     </el-card>
     <div class="table-container">
-      <el-table ref="sellingTable"
-                :data="sellingList"
+      <el-table ref="askingTable"
+                :data="askingList"
                 style="width: 100%"
                 v-loading="listLoading"
                 border>
@@ -97,12 +97,12 @@
           <template slot-scope="scope">
             <p>
               <el-button size="mini"
-                         v-if="hasBuyPermission(scope.row)"
-                         @click="handleBuy(scope.row)">购买
+                         v-if="hasFulfillPermission(scope.row)"
+                         @click="handleFulfill(scope.row)">购买
               </el-button>
               <el-button size="mini"
                          v-if="hasDeletePermission(scope.row)"
-                         @click="handleDeleteSelling(scope.row)">删除
+                         @click="handleDeleteAsking(scope.row)">删除
               </el-button>
             </p>
           </template>
@@ -110,7 +110,7 @@
       </el-table>
     </div>
 
-    <el-dialog title="添加出售" :visible.sync="addVisible">
+    <el-dialog title="添加求课" :visible.sync="addVisible">
       <el-form :model="searchCourseData">
         <el-form-item label="课程名称" :label-width="'120px'">
           <el-select v-model="searchCourseData.name"
@@ -192,7 +192,7 @@
 import {buySelling, addSelling, getSellingList, deleteSelling} from '../../../api/trade'
 import {getCourse, getMajors} from "../../../api/info";
 
-const defaultSellingQuery = {
+const defaultAskingQuery = {
   course_name: "",
   course_grade: 0,
   course_major: 0
@@ -205,11 +205,11 @@ const defaultCourseQuery = {
   year: 0
 }
 export default {
-  name: "AllSelling",
+  name: "AllAsking",
   data() {
     return {
-      sellingQuery: Object.assign({}, defaultSellingQuery),
-      sellingList: null,
+      sellingQuery: Object.assign({}, defaultAskingQuery),
+      askingList: null,
       total: null,
       listLoading: true,
       addVisible: false,
@@ -265,11 +265,11 @@ export default {
       this.listLoading = true;
       getSellingList(this.sellingQuery).then(response => {
         this.listLoading = false;
-        this.sellingList = response.data.items;
+        this.askingList = response.data.items;
         // this.total = this.list.length;
       });
     },
-    hasBuyPermission(item) {
+    hasFulfillPermission(item) {
       return item.Account !== this.$store.getters.account;
     },
     hasDeletePermission(item) {
@@ -351,9 +351,9 @@ export default {
     },
     handleResetSearch() {
       this.selectProductCateValue = [];
-      this.sellingQuery = Object.assign({}, defaultSellingQuery);
+      this.sellingQuery = Object.assign({}, defaultAskingQuery);
     },
-    handleDeleteSelling(row) {
+    handleDeleteAsking(row) {
       this.$confirm('是否要进行删除操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -365,10 +365,9 @@ export default {
         })
       });
     },
-    handleBuy(item) {
-      console.log(item);
+    handleFulfill(item) {
       buySelling({account: item.Account, courseID: item.course.course_id}).then(() => {
-        this.$message({message: "购买成功!", type: "success", duration: 2 * 1000})
+        this.$message({message: "PY成功!", type: "success", duration: 2 * 1000})
         location.reload();
       })
     }

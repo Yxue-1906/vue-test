@@ -1,62 +1,8 @@
 <template>
   <div class="app-container">
-    <el-card class="filter-container" shadow="never">
-      <div>
-        <i class="el-icon-search"></i>
-        <span>筛选搜索</span>
-      </div>
-      <div style="margin-top: 15px">
-        <el-form :inline="true" :model="sellingQuery" size="small" label-width="100px">
-          <el-form-item label="课程名称：">
-            <el-input style="width: 203px" v-model="sellingQuery.course_name" placeholder="课程名称"></el-input>
-          </el-form-item>
-          <el-form-item label="可选年级：">
-            <el-select name="grade"
-                       ref="grade"
-                       v-model="sellingQuery.course_grade">
-              <el-option v-for="grade in grades"
-                         :key="grade.value"
-                         :label="grade.label"
-                         :value="grade.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="可选专业：">
-            <el-select name="major"
-                       ref="major"
-                       v-model="sellingQuery.course_major">
-              <el-option v-for="major in [{major_id: 0, major_name: '所有专业'},...majors]"
-                         :key="major.major_id"
-                         :label="major.major_name"
-                         :value="major.major_id"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-row>
-              <el-form-item>
-                <el-button
-                  style="float: right"
-                  @click="handleSearchList()"
-                  type="primary"
-                  size="small">
-                  查询
-                </el-button>
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  style="float: right;margin-right: 15px"
-                  @click="handleResetSearch()"
-                  size="small">
-                  重置
-                </el-button>
-              </el-form-item>
-            </el-row>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-card>
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
-      <span>出售列表</span>
+      <span>我的出售</span>
       <el-button
         class="btn-add"
         @click="addVisible = true"
@@ -97,11 +43,10 @@
           <template slot-scope="scope">
             <p>
               <el-button size="mini"
-                         v-if="hasBuyPermission(scope.row)"
                          @click="handleBuy(scope.row)">购买
               </el-button>
               <el-button size="mini"
-                         v-if="hasDeletePermission(scope.row)"
+                         v-if="hasPermission(scope.row)"
                          @click="handleDeleteSelling(scope.row)">删除
               </el-button>
             </p>
@@ -182,21 +127,16 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancelAdd">取 消</el-button>
-        <el-button type="primary" @click="handleAddProduct">确 定</el-button>
+        <el-button type="primary" @click="handleAddSelling">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 
 </template>
 <script>
-import {buySelling, addSelling, getSellingList, deleteSelling} from '../../../api/trade'
+import {addSelling, getMySellingList, deleteSelling} from '../../../api/trade'
 import {getCourse, getMajors} from "../../../api/info";
 
-const defaultSellingQuery = {
-  course_name: "",
-  course_grade: 0,
-  course_major: 0
-};
 const defaultCourseQuery = {
   grade: 0,
   major: 0,
@@ -205,10 +145,9 @@ const defaultCourseQuery = {
   year: 0
 }
 export default {
-  name: "AllSelling",
+  name: "courseList",
   data() {
     return {
-      sellingQuery: Object.assign({}, defaultSellingQuery),
       sellingList: null,
       total: null,
       listLoading: true,
@@ -242,7 +181,7 @@ export default {
     }
   },
   created() {
-    this.getList();
+    this.getMyList();
     new Promise((resolve, reject) => {
       getMajors().then(response => {
         this.majors = response.data.items;
@@ -261,18 +200,15 @@ export default {
     })
   },
   methods: {
-    getList() {
+    getMyList() {
       this.listLoading = true;
-      getSellingList(this.sellingQuery).then(response => {
+      getMySellingList().then(response => {
         this.listLoading = false;
         this.sellingList = response.data.items;
         // this.total = this.list.length;
       });
     },
-    hasBuyPermission(item) {
-      return item.Account !== this.$store.getters.account;
-    },
-    hasDeletePermission(item) {
+    hasPermission(item) {
       if (this.$store.getters.authority < 2)
         return true;
       return item.Account === this.$store.getters.account;
@@ -327,15 +263,12 @@ export default {
         }
       })
     },
-    handleSearchList() {
-      this.getList();
-    },
     handleCancelAdd() {
       this.addVisible = false;
       this.searchCourseData = defaultCourseQuery;
       this.updateCourseDetail()
     },
-    handleAddProduct() {
+    handleAddSelling() {
       if (this.courses.length !== 1) {
         this.$message({message: "您提供的课程信息有误, 请检查后重新添加.", type: "error"});
         return;
@@ -349,10 +282,6 @@ export default {
         // this.$message({message: "error", type: "error"})
       })
     },
-    handleResetSearch() {
-      this.selectProductCateValue = [];
-      this.sellingQuery = Object.assign({}, defaultSellingQuery);
-    },
     handleDeleteSelling(row) {
       this.$confirm('是否要进行删除操作?', '提示', {
         confirmButtonText: '确定',
@@ -365,13 +294,6 @@ export default {
         })
       });
     },
-    handleBuy(item) {
-      console.log(item);
-      buySelling({account: item.Account, courseID: item.course.course_id}).then(() => {
-        this.$message({message: "购买成功!", type: "success", duration: 2 * 1000})
-        location.reload();
-      })
-    }
     //   updateDeleteStatus(deleteStatus, ids) {
     //     let params = new URLSearchParams();
     //     params.append('ids', ids);
