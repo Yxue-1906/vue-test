@@ -56,12 +56,12 @@
     </el-card>
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
-      <span>出售列表</span>
+      <span>求课列表</span>
       <el-button
         class="btn-add"
         @click="addVisible = true"
         size="mini">
-        添加出售
+        添加求课
       </el-button>
     </el-card>
     <div class="table-container">
@@ -88,7 +88,7 @@
             <p>{{ scope.row.course.grade }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="出售者" min-width="10%" align="center">
+        <el-table-column label="求课者" min-width="10%" align="center">
           <template slot-scope="scope">
             <p>{{ scope.row.username }}</p>
           </template>
@@ -189,8 +189,8 @@
 
 </template>
 <script>
-import {buySelling, addSelling, getSellingList, deleteSelling} from '../../../api/trade'
 import {getCourse, getMajors} from "../../../api/info";
+import {deleteAsking, fulfillAsking, getAskingList} from "../../../api/ask";
 
 const defaultAskingQuery = {
   course_name: "",
@@ -263,7 +263,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getSellingList(this.sellingQuery).then(response => {
+      getAskingList(this.sellingQuery).then(response => {
         this.listLoading = false;
         this.askingList = response.data.items;
         // this.total = this.list.length;
@@ -350,7 +350,6 @@ export default {
       })
     },
     handleResetSearch() {
-      this.selectProductCateValue = [];
       this.sellingQuery = Object.assign({}, defaultAskingQuery);
     },
     handleDeleteAsking(row) {
@@ -359,31 +358,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteSelling({courseID: row.course.course_id}).then(() => {
+        deleteAsking({courseID: row.course.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
           location.reload();
         })
       });
     },
     handleFulfill(item) {
-      buySelling({account: item.Account, courseID: item.course.course_id}).then(() => {
+      fulfillAsking({account: item.Account, courseID: item.course.course_id}).then(() => {
         this.$message({message: "PY成功!", type: "success", duration: 2 * 1000})
         location.reload();
       })
     }
-    //   updateDeleteStatus(deleteStatus, ids) {
-    //     let params = new URLSearchParams();
-    //     params.append('ids', ids);
-    //     params.append('deleteStatus', deleteStatus);
-    //     updateDeleteStatus(params).then(response => {
-    //       this.$message({
-    //         message: '删除成功',
-    //         type: 'success',
-    //         duration: 1000
-    //       });
-    //     });
-    //     this.getList();
-    //   }
   }
 }
 
