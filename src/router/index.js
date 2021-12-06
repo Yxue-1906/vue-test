@@ -37,17 +37,24 @@ export const constantRouterMap = [
 
 export const asyncRouterMap = [
   {
-    path: '/pms',
+    path: '/sell',
     component: Layout,
-    redirect: '/pms/selling',
-    name: 'pms',
+    redirect: '/sell/selling',
+    name: 'sell',
     meta: {title: '出售', icon: 'product'},
-    children: [{
-      path: 'selling',
-      name: 'selling',
-      component: () => import('@/views/pms/selling/index'),
-      meta: {title: '所有出售', icon: 'selling-list'}
-    },
+    children: [
+      {
+        path: 'selling',
+        name: 'selling',
+        component: () => import('@/views/sell/selling/index'),
+        meta: {title: '所有出售', icon: 'selling-list'}
+      },
+      {
+        path: 'my-selling',
+        name: 'my-selling',
+        component: () => import('@/views/sell/my-selling/index'),
+        meta: {title: '我的出售', icon: 'selling-list'}
+      }
     ]
   },
   {

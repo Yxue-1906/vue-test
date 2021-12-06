@@ -66,7 +66,7 @@
     </el-card>
     <div class="table-container">
       <el-table ref="sellingTable"
-                :data="list"
+                :data="sellingList"
                 style="width: 100%"
                 v-loading="listLoading"
                 border>
@@ -188,7 +188,7 @@
 
 </template>
 <script>
-import {buySelling, addSelling, getSellingList} from '../../../api/trade'
+import {buySelling, addSelling, getSellingList, deleteSelling} from '../../../api/trade'
 import {getCourse, getMajors} from "../../../api/info";
 
 const defaultSellingQuery = {
@@ -204,16 +204,15 @@ const defaultCourseQuery = {
   year: 0
 }
 export default {
-  name: "courseList",
+  name: "AllSelling",
   data() {
     return {
       sellingQuery: Object.assign({}, defaultSellingQuery),
-      list: null,
+      sellingList: null,
       total: null,
       listLoading: true,
       addVisible: false,
       searchCourseData: {},
-      courseIdToAdd: '',
       majors: [],
       courses: [],
       grades: [
@@ -265,13 +264,11 @@ export default {
       this.listLoading = true;
       getSellingList(this.sellingQuery).then(response => {
         this.listLoading = false;
-        this.list = response.data.items;
+        this.sellingList = response.data.items;
         // this.total = this.list.length;
       });
     },
     hasPermission(item) {
-      console.log(item);
-      console.log(this.$store.getters.account);
       if (this.$store.getters.authority < 2)
         return true;
       return item.Account === this.$store.getters.account;
@@ -352,15 +349,16 @@ export default {
       this.selectProductCateValue = [];
       this.sellingQuery = Object.assign({}, defaultSellingQuery);
     },
-    handleDelete(index, row) {
+    handleDeleteSelling(row) {
       this.$confirm('是否要进行删除操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let ids = [];
-        ids.push(row.id);
-        this.updateDeleteStatus(1, ids);
+        deleteSelling({courseID: row.course.course_id}).then(() => {
+          this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
+          location.reload();
+        })
       });
     },
     handleBuy(item) {

@@ -8,9 +8,25 @@ export function getSellingList(queryAttr) {
   })
 }
 
+export function getMySellingList() {
+  return request({
+    url: '/trading/my-selling',
+    method: 'post',
+    data: {}
+  })
+}
+
 export function addSelling(courseData) {
   return request({
-    url: 'trading/add-selling',
+    url: '/trading/add-selling',
+    method: 'post',
+    data: courseData
+  })
+}
+
+export function deleteSelling(courseData) {
+  return request({
+    url: '/trading/delete-selling',
     method: 'post',
     data: courseData
   })
