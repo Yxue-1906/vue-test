@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
-      <span>我买到的</span>
+      <span>我卖出的</span>
     </el-card>
     <div class="table-container">
       <el-table ref="sellingTable"
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import {getMyPurchaseList} from "../../api/trade";
+import {getMySoldList} from "../../api/trade";
 
 export default {
-  name: "MyPurchase",
+  name: "MySold",
   data() {
     return {
       myPurchaseList: null,
@@ -50,7 +50,7 @@ export default {
   methods: {
     getLIst() {
       this.listLoading = true;
-      getMyPurchaseList().then(response => {
+      getMySoldList().then(response => {
         this.listLoading = false;
         this.myPurchaseList = response.data.items;
       });
