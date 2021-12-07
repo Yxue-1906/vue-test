@@ -126,8 +126,8 @@
 
 </template>
 <script>
-import {addSelling, getMySellingList, deleteSelling} from '../../../api/trade'
-import {getCourse, getMajors} from "../../../api/info";
+import {addSelling, getMySellingList, deleteSelling} from '../../api/trade'
+import {getCourse, getMajors} from "../../api/info";
 
 const defaultCourseQuery = {
   grade: 0,

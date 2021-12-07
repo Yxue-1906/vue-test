@@ -16,6 +16,22 @@ export function getMySellingList() {
   })
 }
 
+export function getMyPurchaseList() {
+  return request({
+    url: '/order/my-purchase',
+    method: 'post',
+    data: {}
+  })
+}
+
+export function getMySoldList() {
+  return request({
+    url: '/order/my-sale',
+    method: 'post',
+    data: {}
+  })
+}
+
 export function addSelling(courseData) {
   return request({
     url: '/trading/add-selling',
