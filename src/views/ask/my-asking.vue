@@ -241,6 +241,12 @@ export default {
       })
     },
     handleGetCoursesDetail(queryData) {
+      if (!Number.isInteger(queryData.year))
+        delete queryData.year
+      if (!Number.isInteger(queryData.major))
+        delete queryData.major;
+      if (!Number.isInteger(queryData.grade))
+        delete queryData.grade;
       getCourse(queryData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
         if (this.courses.length === 1) {
