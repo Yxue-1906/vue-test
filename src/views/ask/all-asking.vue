@@ -6,14 +6,14 @@
         <span>筛选搜索</span>
       </div>
       <div style="margin-top: 15px">
-        <el-form :inline="true" :model="sellingQuery" size="small" label-width="100px">
+        <el-form :inline="true" :model="askingQuery" size="small" label-width="100px">
           <el-form-item label="课程名称：">
-            <el-input style="width: 203px" v-model="sellingQuery.course_name" placeholder="课程名称"></el-input>
+            <el-input style="width: 203px" v-model="askingQuery.course_name" placeholder="课程名称"></el-input>
           </el-form-item>
           <el-form-item label="可选年级：">
             <el-select name="grade"
                        ref="grade"
-                       v-model="sellingQuery.course_grade">
+                       v-model="askingQuery.course_grade">
               <el-option v-for="grade in grades"
                          :key="grade.value"
                          :label="grade.label"
@@ -23,7 +23,7 @@
           <el-form-item label="可选专业：">
             <el-select name="major"
                        ref="major"
-                       v-model="sellingQuery.course_major">
+                       v-model="askingQuery.course_major">
               <el-option v-for="major in [{major_id: 0, major_name: '所有专业'},...majors]"
                          :key="major.major_id"
                          :label="major.major_name"
@@ -98,7 +98,7 @@
             <p>
               <el-button size="mini"
                          v-if="hasFulfillPermission(scope.row)"
-                         @click="handleFulfill(scope.row)">购买
+                         @click="handleFulfill(scope.row)">这课我有
               </el-button>
               <el-button size="mini"
                          v-if="hasDeletePermission(scope.row)"
@@ -182,7 +182,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancelAdd">取 消</el-button>
-        <el-button type="primary" @click="handleAddProduct">确 定</el-button>
+        <el-button type="primary" @click="handleAddAsking">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -190,7 +190,7 @@
 </template>
 <script>
 import {getCourse, getMajors} from "../../api/info";
-import {deleteAsking, fulfillAsking, getAskingList} from "../../api/ask";
+import {addAsking, deleteAsking, fulfillAsking, getAskingList} from "../../api/ask";
 
 const defaultAskingQuery = {
   course_name: "",
@@ -208,7 +208,7 @@ export default {
   name: "AllAsking",
   data() {
     return {
-      sellingQuery: Object.assign({}, defaultAskingQuery),
+      askingQuery: Object.assign({}, defaultAskingQuery),
       askingList: null,
       total: null,
       listLoading: true,
@@ -263,7 +263,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getAskingList(this.sellingQuery).then(response => {
+      getAskingList(this.askingQuery).then(response => {
         this.listLoading = false;
         this.askingList = response.data.items;
         // this.total = this.list.length;
@@ -335,12 +335,12 @@ export default {
       this.searchCourseData = defaultCourseQuery;
       this.updateCourseDetail()
     },
-    handleAddProduct() {
+    handleAddAsking() {
       if (this.courses.length !== 1) {
         this.$message({message: "您提供的课程信息有误, 请检查后重新添加.", type: "error"});
         return;
       }
-      addSelling({courseID: this.courses[0].course_id}).then(() => {
+      addAsking({courseID: this.courses[0].course_id}).then(() => {
         this.addVisible = false;
         this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
         location.reload()
@@ -350,7 +350,7 @@ export default {
       })
     },
     handleResetSearch() {
-      this.sellingQuery = Object.assign({}, defaultAskingQuery);
+      this.askingQuery = Object.assign({}, defaultAskingQuery);
     },
     handleDeleteAsking(row) {
       this.$confirm('是否要进行删除操作?', '提示', {
@@ -360,14 +360,14 @@ export default {
       }).then(() => {
         deleteAsking({courseID: row.course.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
-          location.reload();
+          setTimeout(location.reload(), 2 * 1000);
         })
       });
     },
     handleFulfill(item) {
       fulfillAsking({account: item.Account, courseID: item.course.course_id}).then(() => {
         this.$message({message: "PY成功!", type: "success", duration: 2 * 1000})
-        location.reload();
+        setTimeout(location.reload(), 2 * 1000);
       })
     }
   }

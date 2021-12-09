@@ -38,8 +38,8 @@
           <template slot-scope="scope">
             <p>
               <el-button size="mini"
-                         v-if="hasPermission(scope.row)"
-                         @click="handleDeleteSelling(scope.row)">删除
+                         v-if="hasPermission()"
+                         @click="handleDeleteAsking(scope.row)">删除
               </el-button>
             </p>
           </template>
@@ -119,7 +119,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancelAdd">取 消</el-button>
-        <el-button type="primary" @click="handleAddSelling">确 定</el-button>
+        <el-button type="primary" @click="handleAddAsking">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -200,10 +200,8 @@ export default {
         // this.total = this.list.length;
       });
     },
-    hasPermission(item) {
-      if (this.$store.getters.authority < 2)
-        return true;
-      return item.Account === this.$store.getters.account;
+    hasPermission() {
+      return true;
     },
     handleQueryByName(name) {
       this.handleGetCoursesDetail({...this.searchCourseData, name: name});
@@ -260,7 +258,7 @@ export default {
       this.searchCourseData = defaultCourseQuery;
       this.updateCourseDetail()
     },
-    handleAddSelling() {
+    handleAddAsking() {
       if (this.courses.length !== 1) {
         this.$message({message: "您提供的课程信息有误, 请检查后重新添加.", type: "error"});
         return;
@@ -274,13 +272,13 @@ export default {
         // this.$message({message: "error", type: "error"})
       })
     },
-    handleDeleteSelling(row) {
+    handleDeleteAsking(row) {
       this.$confirm('是否要进行删除操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteAsking({courseID: row.course.course_id}).then(() => {
+        deleteAsking({courseID: row.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
           location.reload();
         })
