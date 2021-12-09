@@ -48,7 +48,7 @@ service.interceptors.response.use(
       })
 
       // 401:未登录;
-      if (res.data.message === 401) {
+      if (res.data.code === 401) {
         store.dispatch('FedLogOut').then(() => {
           location.reload()// 为了重新实例化vue-router对象 避免bug
         })
