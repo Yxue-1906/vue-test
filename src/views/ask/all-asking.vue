@@ -179,6 +179,9 @@
                        :value="year"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="" :label-width="'120px'">
+          <el-button @click="handleReset">重 置</el-button>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancelAdd">取 消</el-button>
@@ -198,11 +201,8 @@ const defaultAskingQuery = {
   course_major: 0
 };
 const defaultCourseQuery = {
-  grade: 0,
-  major: 0,
   name: "",
   teacher: "",
-  year: 0
 }
 export default {
   name: "AllAsking",
@@ -336,10 +336,13 @@ export default {
     handleSearchList() {
       this.getList();
     },
+    handleReset() {
+      this.searchCourseData = Object.assign({}, defaultCourseQuery);
+      this.updateCourseDetail();
+    },
     handleCancelAdd() {
       this.addVisible = false;
-      this.searchCourseData = defaultCourseQuery;
-      this.updateCourseDetail()
+      this.handleReset();
     },
     handleAddAsking() {
       if (this.courses.length !== 1) {
