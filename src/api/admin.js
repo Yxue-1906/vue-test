@@ -15,3 +15,11 @@ export function getAdminList() {
     data: {}
   })
 }
+
+// export function deleteAdmin(data) {
+//   return request({
+//     url: '/admin/all-admin',
+//     method: 'post',
+//     data: {}
+//   })
+// }

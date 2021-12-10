@@ -2,10 +2,10 @@
   <el-form :model="user" :rules="updateRules" ref="updateForm"
            label-width="130px" size="mini" class="update_form" label-position="right">
     <el-form-item label="Username">
-      <el-input v-model.trim="user.username" :disabled="true"/>
+      <el-input v-model="user.username" :disabled="this.$store.getters.authority>1"/>
     </el-form-item>
     <el-form-item label="Name">
-      <el-input v-model.trim="user.name"/>
+      <el-input v-model="user.name"/>
     </el-form-item>
     <el-form-item label="New Password" prop="password">
       <el-input v-model="user.password" show-password/>
@@ -19,12 +19,10 @@
     <el-form-item prop="grade" label="Grade">
       <el-select name="grade"
                  ref="grade"
-                 v-model="user.grade"
-                 autocomplete="on">
+                 v-model.number="user.grade">
         <el-option v-for="grade in grades"
-                   :key="grade.value"
-                   :label="grade.label"
-                   :value="grade.value"></el-option>
+                   :label="grade"
+                   :value="grade"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="Major">
@@ -46,7 +44,7 @@
 <script>
 import {mapGetters} from "vuex";
 import {getCookie} from "../../../utils/support";
-import {getMajors} from "../../../api/info";
+import {getMajorList} from "../../../api/info";
 
 export default {
   data() {
@@ -58,64 +56,33 @@ export default {
       }
     };
     const validateRepeat = (rule, value, callback) => {
-      if (value !== this.user.password) {
+      if (this.repeat !== this.user.password) {
         callback(new Error('两次输入的密码不一致'))
       } else {
         callback()
       }
     };
     return {
-      grades: [
-        {
-          value: 2018,
-          label: '2018级'
-        },
-        {
-          value: 2019,
-          label: '2019级'
-        },
-        {
-          value: 2020,
-          label: '2020级'
-        },
-        {
-          value: 2021,
-          label: '2021级'
-        }
-      ],
+      grades: [2018, 2019, 2020, 2021],
       majors: [],
-      user: {
-        username: this.$store.getters.username,
-        name: '',
-        password: '',
-        studentID: '',
-        grade: 0,
-        major: 0
-      },
-      repeat: "",
+      user: {},
+      repeat: '',
       updateRules: {
         new_password: [{trigger: 'blur', validator: validatePass}],
         repeat_new_password: [{trigger: 'blur', validator: validateRepeat}]
       }
     }
   },
-  computed: {
-    ...mapGetters([
-      "username",
-      "name",
-      "studentID",
-      "grade",
-      "major"
-    ])
-  },
   created() {
-    this.user.username = this.username;
-    this.user.name = this.name;
-    this.user.studentID = this.studentID;
-    this.user.grade = this.grade;
-    this.user.major = this.major;
+    this.user = {
+      username: this.$store.getters.username,
+      name: this.$store.getters.name,
+      studentID: this.$store.getters.studentID,
+      grade: this.$store.getters.grade,
+      major: this.$store.getters.major,
+    }
     new Promise((resolve, reject) => {
-      getMajors().then(response => {
+      getMajorList().then(response => {
         this.majors = response.data.items;
       })
       resolve();
@@ -128,10 +95,8 @@ export default {
       this.$refs.updateForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          if (!this.user.password) {
-            delete this.user.password
-          }
-          delete this.user.repeat_new_password
+          if (this.user.password === '' || this.user.password == null)
+            delete this.user.password;
           this.$store.dispatch("UpdateInfo", this.user).then(() => {
             this.loading = false;
             this.$message({
@@ -139,6 +104,7 @@ export default {
               type: 'success',
               duration: 3 * 1000
             })
+            setTimeout("location.reload()", 3 * 1000);
           }).catch(error => {
             this.loading = false;
           })

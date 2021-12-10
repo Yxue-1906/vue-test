@@ -120,7 +120,6 @@ const user = {
     UpdateInfo({commit}, data) {
       return new Promise((resolve, reject) => {
         updateStuInfo(data).then(response => {
-          //todo: travel through all words
           commit("SET_UPDATE", true);
           resolve()
         })

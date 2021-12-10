@@ -13,13 +13,12 @@
               <el-tab-pane label="Account" name="account">
                 <account/>
               </el-tab-pane>
-              <el-tab-pane label="AdminPanel" name="admin_panel">
-                <admin-panel/>
+              <el-tab-pane v-for="comp in comps" :label="comp.label">
+                <component :is="comp.app"></component>
               </el-tab-pane>
             </el-tabs>
           </el-card>
         </el-col>
-
       </el-row>
     </div>
   </div>
@@ -27,10 +26,24 @@
 
 <script>
 import Account from './components/Account'
-import AdminPanel from "./components/AdminPanel";
 
 export default {
   name: 'user',
-  components: {AdminPanel, Account},
+  components: {
+    Account,
+  },
+  data() {
+    return {
+      comps: []
+    }
+  },
+  created() {
+    if (this.$store.getters.authority < 1)
+      this.comps.push({label: "Admin Panel", app: () => import("./components/AdminPanel")});
+    if (this.$store.getters.authority < 2)
+      this.comps.push({label: "Course Panel", app: () => import("./components/CoursePanel")})
+    // if(this.$store.getters.account<2)
+    //   this.comps.push()
+  }
 }
 </script>

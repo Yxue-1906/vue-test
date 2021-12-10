@@ -192,7 +192,7 @@
 
 </template>
 <script>
-import {getCourse, getMajors} from "../../api/info";
+import {getCourseList, getMajorList} from "../../api/info";
 import {addAsking, deleteAsking, fulfillAsking, getAskingList} from "../../api/ask";
 
 const defaultAskingQuery = {
@@ -244,7 +244,7 @@ export default {
   created() {
     this.getList();
     new Promise((resolve, reject) => {
-      getMajors().then(response => {
+      getMajorList().then(response => {
         this.majors = response.data.items;
       })
       resolve();
@@ -252,7 +252,7 @@ export default {
       reject(err);
     })
     new Promise((resolve, reject) => {
-      getCourse(defaultCourseQuery).then(response => {
+      getCourseList(defaultCourseQuery).then(response => {
         this.courses = response.data.items;
       })
       resolve();
@@ -302,7 +302,7 @@ export default {
         delete this.searchCourseData.major;
       if (!Number.isInteger(this.searchCourseData.grade))
         delete this.searchCourseData.grade;
-      getCourse(this.searchCourseData).then(response => {
+      getCourseList(this.searchCourseData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
         if (this.courses.length === 1) {
           let course = this.courses[0];
@@ -321,7 +321,7 @@ export default {
         delete queryData.major;
       if (!Number.isInteger(queryData.grade))
         delete queryData.grade;
-      getCourse(queryData).then(response => {
+      getCourseList(queryData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
         if (this.courses.length === 1) {
           let course = this.courses[0];

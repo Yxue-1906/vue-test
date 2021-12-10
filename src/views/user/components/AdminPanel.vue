@@ -15,7 +15,7 @@
                 :data="adminList"
                 style="width: 100%"
                 border>
-        <el-table-column label="Admin Id" min-width="15%" align="center">
+        <el-table-column label="Admin Id" min-width="15%" align="center" h>
           <template slot-scope="scope">{{ scope.row.account }}</template>
         </el-table-column>
         <el-table-column label="Admin Username" min-width="15%" align="center">
@@ -24,11 +24,13 @@
         <el-table-column label="Notes" min-width="60%" align="center">
           <template slot-scope="scope">{{ scope.row.remark }}</template>
         </el-table-column>
-        <el-table-column label="Operation" min-width="10%" align="center">
-          <p>
-            <el-button>删除</el-button>
-          </p>
-        </el-table-column>
+<!--        <el-table-column label="Operation" min-width="10%" align="center">-->
+<!--          <template slot-scope="scope">-->
+<!--            <p>-->
+<!--              <el-button @click="handleDeleteAdmin(scope)">删除</el-button>-->
+<!--            </p>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
     </div>
     <el-dialog title="添加管理员" :visible.sync="addVisible">
@@ -52,7 +54,7 @@
         </el-form-item>
         <el-form-item label="备注信息" :label-width="'120px'">
           <el-input @keyup.enter.native="handleAddAdmin"
-                    v-model="addAdminDetail.username"
+                    v-model="addAdminDetail.remark"
                     placeholder="请输入备注信息或留空"></el-input>
         </el-form-item>
       </el-form>
@@ -70,6 +72,8 @@ import {isvalidUsername} from "../../../utils/validate";
 import {addAdmin, getAdminList} from "../../../api/admin";
 
 export default {
+  label: "A",
+  name: "admin-panel",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
@@ -83,12 +87,10 @@ export default {
         callback(new Error('密码不能小于6位'))
       } else if (value.length > 16) {
         callback(new Error('密码长度应小于16位'))
-      } else if (value !== this.repeatPassword) {
-        callback(new Error('两次输入的密码不一致'))
       } else callback();
     };
     const validateRepeat = (rule, value, callback) => {
-      if (value !== this.addAdminDetail.password)
+      if (this.repeatPassword !== this.addAdminDetail.password)
         callback(new Error('两次输入的密码不一致'))
       else callback();
     };
@@ -112,12 +114,26 @@ export default {
   methods: {
     handleCancelAdd() {
       this.addVisible = false;
+      this.addAdminDetail = Object.assign({}, {});
+      this.repeatPassword = "";
     },
     handleAddAdmin() {
-      addAdmin(this.addAdminDetail).then(response => {
-        this.$message({message: "添加成功!", type: "success", duration: 1000});
-        this.addAdminDetail = Object.assign({}, {});
-        setTimeout(location.reload, 1000);
+      this.$refs.addAdminForm.validate(valid => {
+        if (valid) {
+          addAdmin(this.addAdminDetail).then(response => {
+            this.$message({message: "添加成功!", type: "success", duration: 1000});
+            this.addAdminDetail = Object.assign({}, {});
+            this.repeatPassword = "";
+            this.addVisible = false;
+            getAdminList().then(response => {
+              this.adminList = response.data.items;
+            })
+          }).catch(err => {
+
+          })
+        } else {
+          this.$message({message: "输入的管理员信息不合法, 请检查后重新提交", type: "error", duration: 1000})
+        }
       })
     },
   }
