@@ -145,7 +145,7 @@ import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
 import login_center_bg from '@/assets/images/login_center_bg.png';
 import logo from '@/assets/images/logo.jpg'
 import {register} from "../../api/user";
-import {getMajors} from "../../api/info";
+import {getMajorList} from "../../api/info";
 
 export default {
   name: 'register',
@@ -226,7 +226,7 @@ export default {
     this.registerForm.grade = "";
     this.registerForm.major = "";
     new Promise((resolve, reject) => {
-      getMajors().then(response => {
+      getMajorList().then(response => {
         this.majors = response.data.items;
       })
       resolve();

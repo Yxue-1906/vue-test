@@ -85,7 +85,7 @@
         </el-table-column>
         <el-table-column label="可选专业" min-width="10%" align="center">
           <template slot-scope="scope">
-            <p>{{ scope.row.course.grade }}</p>
+            <p>{{ scope.row.course.major }}</p>
           </template>
         </el-table-column>
         <el-table-column label="求课者" min-width="10%" align="center">
@@ -192,7 +192,7 @@
 
 </template>
 <script>
-import {getCourse, getMajors} from "../../api/info";
+import {getCourseList, getMajorList} from "../../api/info";
 import {addAsking, deleteAsking, fulfillAsking, getAskingList} from "../../api/ask";
 
 const defaultAskingQuery = {
@@ -244,7 +244,7 @@ export default {
   created() {
     this.getList();
     new Promise((resolve, reject) => {
-      getMajors().then(response => {
+      getMajorList().then(response => {
         this.majors = response.data.items;
       })
       resolve();
@@ -252,7 +252,7 @@ export default {
       reject(err);
     })
     new Promise((resolve, reject) => {
-      getCourse(defaultCourseQuery).then(response => {
+      getCourseList(defaultCourseQuery).then(response => {
         this.courses = response.data.items;
       })
       resolve();
@@ -302,7 +302,7 @@ export default {
         delete this.searchCourseData.major;
       if (!Number.isInteger(this.searchCourseData.grade))
         delete this.searchCourseData.grade;
-      getCourse(this.searchCourseData).then(response => {
+      getCourseList(this.searchCourseData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
         if (this.courses.length === 1) {
           let course = this.courses[0];
@@ -321,7 +321,7 @@ export default {
         delete queryData.major;
       if (!Number.isInteger(queryData.grade))
         delete queryData.grade;
-      getCourse(queryData).then(response => {
+      getCourseList(queryData).then(response => {
         this.courses = response.data.items == null ? [] : response.data.items;
         if (this.courses.length === 1) {
           let course = this.courses[0];
@@ -352,7 +352,7 @@ export default {
       addAsking({courseID: this.courses[0].course_id}).then(() => {
         this.addVisible = false;
         this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
-        location.reload()
+        setTimeout(location.reload, 2 * 1000);
       }).catch(error => {
         this.addVisible = false;
         // this.$message({message: "error", type: "error"})
@@ -369,14 +369,14 @@ export default {
       }).then(() => {
         deleteAsking({courseID: row.course.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
-          setTimeout(location.reload(), 2 * 1000);
+          setTimeout(location.reload, 2 * 1000);
         })
       });
     },
     handleFulfill(item) {
       fulfillAsking({account: item.Account, courseID: item.course.course_id}).then(() => {
         this.$message({message: "PY成功!", type: "success", duration: 2 * 1000})
-        setTimeout(location.reload(), 2 * 1000);
+        setTimeout(location.reload, 2 * 1000);
       })
     }
   }

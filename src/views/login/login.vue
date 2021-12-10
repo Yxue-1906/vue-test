@@ -7,10 +7,8 @@
                ref="loginForm"
                label-position="left">
         <div style="text-align: center">
-          <!--          <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EFF"></svg-icon>-->
           <img :src="logo" style="height: 90px;"/>
         </div>
-        <!--        <h2 class="login-title color-main">mall-admin-web</h2>-->
         <el-form-item prop="username">
           <el-input name="username"
                     type="text"
