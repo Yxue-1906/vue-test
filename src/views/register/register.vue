@@ -10,10 +10,7 @@
           <img :src="logo" style="height: 90px;"/>
         </div>
         <el-form-item prop="username">
-          <el-input name="username"
-                    type="text"
-                    v-model="registerForm.username"
-                    autoComplete="on"
+          <el-input v-model="registerForm.username"
                     placeholder="请输入用户名">
               <span slot="prefix">
                 <svg-icon icon-class="user" class="color-main"></svg-icon>
@@ -21,11 +18,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input name="name"
-                    type="text"
-                    ref="name"
-                    v-model="registerForm.name"
-                    autoComplete="on"
+          <el-input v-model="registerForm.name"
                     placeholder="请输入姓名">
               <span slot="prefix">
                 <svg-icon icon-class="user" class="color-main"></svg-icon>
@@ -33,11 +26,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="studentID">
-          <el-input name="studentID"
-                    type="text"
-                    ref="studentID"
-                    v-model="registerForm.studentID"
-                    autoComplete="on"
+          <el-input v-model="registerForm.studentID"
                     placeholder="请输入学号">
               <span slot="prefix">
                 <svg-icon icon-class="user" class="color-main"></svg-icon>
@@ -45,11 +34,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="phone">
-          <el-input name="phone"
-                    type="text"
-                    ref="phone"
-                    v-model="registerForm.phone"
-                    autoComplete="on"
+          <el-input v-model="registerForm.phone"
                     placeholder="请输入手机号">
               <span slot="prefix">
                 <svg-icon icon-class="user" class="color-main"></svg-icon>
@@ -59,11 +44,7 @@
         <el-row type="flex" :gutter="10">
           <el-col>
             <el-form-item prop="password">
-              <el-input name="password"
-                        ref="password"
-                        @keyup.enter.native="handleRegister"
-                        v-model="registerForm.password"
-                        autoComplete="on"
+              <el-input v-model="registerForm.password"
                         placeholder="请输入密码"
                         show-password>
                 <span slot="prefix">
@@ -74,11 +55,7 @@
           </el-col>
           <el-col>
             <el-form-item prop="repeat_password">
-              <el-input name="repeat_password"
-                        ref="repeat_password"
-                        @keyup.enter.native="handleRegister"
-                        v-model="registerForm.repeat_password"
-                        autoComplete="on"
+              <el-input v-model="repeat"
                         placeholder="请重复密码"
                         show-password>
                 <span slot="prefix">
@@ -91,16 +68,11 @@
         <el-row type="flex" :gutter="10">
           <el-col>
             <el-form-item prop="grade">
-              <el-select name="grade"
-                         ref="grade"
-                         v-model="registerForm.grade"
-                         autoComplete="on"
-                         placeholder="请选择年级"
+              <el-select placeholder="请选择年级"
                          v-model.number="registerForm.grade">
                 <el-option v-for="grade in grades"
-                           :key="grade.value"
-                           :label="grade.label"
-                           :value="grade.value"></el-option>
+                           :label="grade"
+                           :value="grade"></el-option>
                 <span slot="prefix">
             <svg-icon icon-class="user" class="color-main"></svg-icon>
           </span>
@@ -109,13 +81,9 @@
           </el-col>
           <el-col>
             <el-form-item prop="major">
-              <el-select name="major"
-                         ref="major"
-                         v-model="registerForm.major"
-                         autoComplete="on"
+              <el-select v-model.number="registerForm.major"
                          placeholder="请选择专业">
                 <el-option v-for="major in majors"
-                           :key="major.major_id"
                            :label="major.major_name"
                            :value="major.major_id"></el-option>
                 <span slot="prefix">
@@ -140,10 +108,9 @@
 </template>
 
 <script>
-import {isvalidUsername} from '@/utils/validate';
-import {setSupport, getSupport, setCookie, getCookie} from '@/utils/support';
-import login_center_bg from '@/assets/images/login_center_bg.png';
-import logo from '@/assets/images/logo.jpg'
+import {isvalidUsername} from '../../utils/validate';
+import login_center_bg from '../../assets/images/login_center_bg.png';
+import logo from '../../assets/images/logo.jpg'
 import {register} from "../../api/user";
 import {getMajorList} from "../../api/info";
 
@@ -165,54 +132,30 @@ export default {
       }
     };
     const validatePass = (rule, value, callback) => {
-      if (value.length < 3) {
-        callback(new Error('密码不能小于3位'))
+      if (value.length < 6) {
+        callback(new Error('密码不能小于6位'))
       } else {
         callback()
       }
     };
     const validateRepeat = (rule, value, callback) => {
-      if (value !== this.registerForm.password) {
+      if (this.repeat != null && this.registerForm.password !== null && this.repeat !== this.registerForm.password) {
         callback(new Error('两次输入的密码不一致'))
       } else {
         callback()
       }
-    }
+    };
     return {
-      grades: [
-        {
-          value: 2018,
-          label: '2018级'
-        },
-        {
-          value: 2019,
-          label: '2019级'
-        },
-        {
-          value: 2020,
-          label: '2020级'
-        },
-        {
-          value: 2021,
-          label: '2021级'
-        }
-      ],
+      repeat: '',
+      grades: [2018, 2019, 2020, 2021],
       majors: [],
-      registerForm: {
-        username: '',
-        name: '',
-        password: '',
-        repeat_password: '',
-        studentID: "",
-        phone: "",
-        grade: "",
-        major: "",
-      },
+      registerForm: {},
       registerRules: {
         username: [{required: true, trigger: 'blur', validator: validateUsername}],
         name: [{required: true, trigger: 'blur', validator: validateName}],
         password: [{required: true, trigger: 'blur', validator: validatePass}],
-        repeat_password: [{required: true, trigger: 'blur', validator: validateRepeat}]
+        repeat_password: [{required: true, trigger: 'blur', validator: validateRepeat}],
+
       },
       loading: false,
       login_center_bg,
@@ -220,11 +163,6 @@ export default {
     }
   },
   created() {
-    this.registerForm.username = '';
-    this.registerForm.password = '';
-    this.registerForm.repeat_password = '';
-    this.registerForm.grade = "";
-    this.registerForm.major = "";
     new Promise((resolve, reject) => {
       getMajorList().then(response => {
         this.majors = response.data.items;
@@ -265,9 +203,6 @@ export default {
 </script>
 
 <style scoped>
-/*.register-page {*/
-/*  min-height: 1000px;*/
-/*}*/
 
 .register-form-layout {
   position: absolute;

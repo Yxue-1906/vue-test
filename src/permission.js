@@ -4,13 +4,8 @@ import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'// Progress 进度条样式
 import {Message} from 'element-ui'
 import {getToken} from '@/utils/auth'
-import {getCookie, removeCookies} from "./utils/support";
-import {removeToken} from "./utils/auth"; // 验权
 
 const whiteList = ['/register', '/login'] // 不重定向白名单
-// 3457
-// 使用默认名字从router import了生成的路由器
-// 这里定义了全局路由守卫
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
