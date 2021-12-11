@@ -37,6 +37,13 @@ export const constantRouterMap = [
 
 export const asyncRouterMap = [
   {
+    path: '/home',
+    name: 'home',
+    component: () => import('../views/home/home.vue'),//todo: 主页路由条目
+    meta: {title: '主页'}
+  },
+
+  {
     path: '/sell',
     component: Layout,
     redirect: '/sell/selling',
