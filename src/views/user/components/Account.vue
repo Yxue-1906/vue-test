@@ -7,7 +7,7 @@
     <el-form-item label="Name">
       <el-input v-model="user.name"/>
     </el-form-item>
-    <el-form-item label="New Password" prop="password">
+    <el-form-item label="New Password" prop="new_password">
       <el-input v-model="user.password" show-password/>
     </el-form-item>
     <el-form-item label="Repeat Password" prop="repeat_new_password">
@@ -49,14 +49,19 @@ import {getMajorList} from "../../../api/info";
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value.length < 6 && value.length !== 0) {
-        callback(new Error('密码不能小于6位'))
-      } else {
+      console.log(value)
+      if (value == null || value.length > 5) {
+        if (value != null && value.length === 0)
+          delete this.user.password;
         callback()
+      } else {
+        callback(new Error('密码不能小于6位'))
       }
     };
     const validateRepeat = (rule, value, callback) => {
-      if (this.repeat !== this.user.password) {
+      if (this.repeat != null && this.repeat.length === 0)
+        this.repeat = null;
+      if (this.repeat != this.user.password) {
         callback(new Error('两次输入的密码不一致'))
       } else {
         callback()

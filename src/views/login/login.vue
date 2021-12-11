@@ -88,21 +88,10 @@ export default {
       supportDialogVisible: false
     }
   },
-  created() {
-    this.loginForm.username = getCookie("username");
-    this.loginForm.password = '';
-    this.loginForm.username = '';
-    this.loginForm.password = '';
-  },
   methods: {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          // let isSupport = getSupport();
-          // if(isSupport===undefined||isSupport==null){
-          //   this.dialogVisible =true;
-          //   return;
-          // }
           this.loading = true;
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false;
