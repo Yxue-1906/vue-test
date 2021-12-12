@@ -99,7 +99,7 @@
             <p>
               <el-button size="mini"
                          v-if="hasFulfillPermission(scope.row)"
-                         @click="handleFulfill(scope.row)">这课我有
+                         @click="handleFulfill(scope.row)">我有
               </el-button>
               <el-button size="mini"
                          v-if="hasDeletePermission(scope.row)"
@@ -271,6 +271,8 @@ export default {
       });
     },
     hasFulfillPermission(item) {
+      if (this.$store.getters.authority < 2)
+        return false;
       return item.Account !== this.$store.getters.account;
     },
     hasDeletePermission(item) {

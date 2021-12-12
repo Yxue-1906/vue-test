@@ -271,6 +271,8 @@ export default {
       });
     },
     hasBuyPermission(item) {
+      if (this.$store.getters.authority < 2)
+        return false;
       return item.Account !== this.$store.getters.account;
     },
     hasDeletePermission(item) {
