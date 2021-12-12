@@ -72,7 +72,7 @@ export const asyncRouterMap = [
   {
     path: '/ask',
     component: Layout,
-    redirect: '/oms/ask',
+    redirect: '/ask/asking',
     name: 'ask',
     meta: {title: '求课', icon: 'product'},
     children: [

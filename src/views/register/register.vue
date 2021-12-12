@@ -55,7 +55,7 @@
           </el-col>
           <el-col>
             <el-form-item prop="repeat_password">
-              <el-input v-model="repeat"
+              <el-input v-model="repeatPassword"
                         placeholder="请重复密码"
                         show-password>
                 <span slot="prefix">
@@ -134,19 +134,19 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('密码不能小于6位'))
-      } else {
-        callback()
-      }
+      } else if (value.length > 16) {
+        callback(new Error('密码长度应小于16位'))
+      } else callback();
     };
     const validateRepeat = (rule, value, callback) => {
-      if (this.repeat != null && this.registerForm.password !== null && this.repeat !== this.registerForm.password) {
+      if (this.repeatPassword != null && this.registerForm.password !== null && this.repeatPassword !== this.registerForm.password) {
         callback(new Error('两次输入的密码不一致'))
       } else {
         callback()
       }
     };
     return {
-      repeat: '',
+      repeatPassword: '',
       grades: [2018, 2019, 2020, 2021],
       majors: [],
       registerForm: {},

@@ -58,6 +58,7 @@
       <i class="el-icon-tickets"></i>
       <span>求课列表</span>
       <el-button
+        v-if="this.$store.getters.authority>1"
         class="btn-add"
         @click="addVisible = true"
         size="mini">
