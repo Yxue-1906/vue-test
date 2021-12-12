@@ -77,36 +77,24 @@ const permission = {
   },
   actions: {
     GenerateRoutes({commit}, username) {
-      // return new Promise(resolve => {
-      //   const { menus } = data;
-      //   const { username } = data;
-      //   console.log(asyncRouterMap);
-      //   const accessedRouters = asyncRouterMap.filter(v => {
-      //     //admin帐号直接返回所有菜单
-      //     // if(username==='admin') return true;
-      //     // console.log(v);
-      //     if (hasPermission(menus, v)) {
-      //       if (v.children && v.children.length > 0) {
-      //         v.children = v.children.filter(child => {
-      //           if (hasPermission(menus, child)) {
-      //             return child
-      //           }
-      //           return false;
-      //         });
-      //         return v
-      //       } else {
-      //         return v
-      //       }
-      //     }
-      //     return false;
-      //   });
-      //   //对菜单进行排序
-      //   sortRouters(accessedRouters);
-      //   commit('SET_ROUTERS', accessedRouters);
-      //   resolve();
-      // })
       return new Promise(resolve => {
         const accessedRouters = asyncRouterMap.filter(v => {
+          if (this.getters.authority < 2) {
+            if (v.name === 'sell') {
+              v.children = v.children.filter(child => {
+                if (child.name === 'selling') return child;
+                return false;
+              })
+              return v;
+            } else if (v.name === 'ask') {
+              v.children = v.children.filter(child => {
+                if (child.name === 'asking') return child;
+                return false;
+              })
+              return v;
+            }
+            return v;
+          }
           return v;//todo: forbid admin panel
         })
         //对菜单进行排序
