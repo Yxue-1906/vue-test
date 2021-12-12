@@ -178,17 +178,13 @@ export default {
         if (valid) {
           this.loading = true;
           let registerData = this.registerForm;
-          delete registerData.repeat_password;
-          new Promise((resolve, reject) => {
-            register(registerData).then(response => {
-              resolve()
-            }).catch(error => {
-              reject(error)
-            })
-          }).then(() => {
+          this.$store.dispatch("Register", registerData).then(() => {
             this.loading = false;
-            this.$message({message: "注册成功!", type: "success"})
-            this.$router.replace({path: '/login'});
+            this.$message({message: "注册成功!", type: "success", duration: 1000})
+            setTimeout(() => {
+              this.$router.push({path: '/user'});
+            }, 1000);
+            // this.$router.replace({path: '/login'});
           }).catch(() => {
             this.loading = false
           })
