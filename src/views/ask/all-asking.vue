@@ -370,14 +370,14 @@ export default {
       }).then(() => {
         deleteAsking({courseID: row.course.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
-          setTimeout(location.reload, 2 * 1000);
+          this.getList();
         })
       });
     },
     handleFulfill(item) {
       fulfillAsking({account: item.Account, courseID: item.course.course_id}).then(() => {
         this.$message({message: "PY成功!", type: "success", duration: 2 * 1000})
-        setTimeout(location.reload, 2 * 1000);
+        this.getList();
       })
     }
   }
