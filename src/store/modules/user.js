@@ -56,10 +56,6 @@ const user = {
           const data = response.data
           const authority = data.authority;
           setToken(data.token);
-          console.log(data);
-          // setCookie('username', username)
-          // commit('SET_TOKEN', tokenStr); //提交了一个mutation, tokenStr是它的payload
-          //todo: move to GetInfo
           commit('SET_AUTHORITY', authority);
           commit('SET_UPDATE', true);
           resolve()
@@ -69,24 +65,21 @@ const user = {
       })
     },
 
-    // //注册
-    // Register({commit}, userInfo) {
-    //   const userData = {
-    //     user_name: userInfo.username.trim(),
-    //     password: userInfo.password,
-    //     name: userInfo.name,
-    //     studentID: userInfo.studentID,
-    //     grade: userInfo.grade,
-    //     major: userInfo.major
-    //   }
-    //   return new Promise((resolve, reject) => {
-    //     register(userData).then(response => {
-    //       resolve()
-    //     }).catch(error => {
-    //       reject(error)
-    //     })
-    //   })
-    // },
+    //注册
+    Register({commit}, userInfo) {
+      return new Promise((resolve, reject) => {
+        register(userInfo).then(response => {
+          const data = response.data
+          const authority = data.authority;
+          setToken(data.token);
+          commit('SET_AUTHORITY', authority);
+          commit('SET_UPDATE', true);
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
 
     // 获取用户信息
     GetInfo({commit, state}) {
