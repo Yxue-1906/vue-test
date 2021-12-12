@@ -275,7 +275,7 @@ export default {
       addSelling({courseID: this.courses[0].course_id}).then(() => {
         this.addVisible = false;
         this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
-        setTimeout(location.reload, 2 * 1000);
+        this.getList();
       }).catch(error => {
         this.addVisible = false;
         // this.$message({message: "error", type: "error"})
@@ -293,19 +293,6 @@ export default {
         })
       });
     },
-    //   updateDeleteStatus(deleteStatus, ids) {
-    //     let params = new URLSearchParams();
-    //     params.append('ids', ids);
-    //     params.append('deleteStatus', deleteStatus);
-    //     updateDeleteStatus(params).then(response => {
-    //       this.$message({
-    //         message: '删除成功',
-    //         type: 'success',
-    //         duration: 1000
-    //       });
-    //     });
-    //     this.getList();
-    //   }
   }
 }
 
