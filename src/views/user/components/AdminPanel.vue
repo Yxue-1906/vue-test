@@ -24,13 +24,13 @@
         <el-table-column label="Notes" min-width="60%" align="center">
           <template slot-scope="scope">{{ scope.row.remark }}</template>
         </el-table-column>
-<!--        <el-table-column label="Operation" min-width="10%" align="center">-->
-<!--          <template slot-scope="scope">-->
-<!--            <p>-->
-<!--              <el-button @click="handleDeleteAdmin(scope)">删除</el-button>-->
-<!--            </p>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <!--        <el-table-column label="Operation" min-width="10%" align="center">-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <p>-->
+        <!--              <el-button @click="handleDeleteAdmin(scope)">删除</el-button>-->
+        <!--            </p>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
       </el-table>
     </div>
     <el-dialog title="添加管理员" :visible.sync="addVisible">
@@ -45,12 +45,14 @@
         <el-form-item prop="password" label="管理员密码" :label-width="'120px'">
           <el-input @keyup.enter.native="handleAddAdmin"
                     v-model="addAdminDetail.password"
-                    placeholder="请设置管理员密码"></el-input>
+                    placeholder="请设置管理员密码"
+                    show-password></el-input>
         </el-form-item>
         <el-form-item prop="repeat" label="重复密码" :label-width="'120px'">
           <el-input @keyup.enter.native="handleAddAdmin"
                     v-model="repeatPassword"
-                    placeholder="请重复一遍密码"></el-input>
+                    placeholder="请重复一遍密码"
+                    show-password></el-input>
         </el-form-item>
         <el-form-item label="备注信息" :label-width="'120px'">
           <el-input @keyup.enter.native="handleAddAdmin"
@@ -83,14 +85,18 @@ export default {
       }
     };
     const validatePass = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (this.addAdminDetail.password == null)
+        callback(new Error('密码不能为空'))
+      else if (value.length < 6)
         callback(new Error('密码不能小于6位'))
-      } else if (value.length > 16) {
+      else if (value.length > 16)
         callback(new Error('密码长度应小于16位'))
-      } else callback();
+      else callback();
     };
     const validateRepeat = (rule, value, callback) => {
-      if (this.repeatPassword !== this.addAdminDetail.password)
+      if (this.repeatPassword == null)
+        callback(new Error('密码不能为空'))
+      else if (this.repeatPassword !== this.addAdminDetail.password)
         callback(new Error('两次输入的密码不一致'))
       else callback();
     };
