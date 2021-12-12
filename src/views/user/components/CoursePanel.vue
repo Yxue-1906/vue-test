@@ -30,6 +30,13 @@
         <el-table-column label="开课年份" min-width="15%" align="center">
           <template slot-scope="scope">{{ scope.row.year }}</template>
         </el-table-column>
+        <el-table-column label="操作" min-width="15%" align="center">
+          <template slot-scope="scope">
+            <p>
+              <el-button @click="handleDeleteCourse(scope.row)">删除</el-button>
+            </p>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <el-dialog title="添加课程" :visible.sync="addVisible">
@@ -83,7 +90,8 @@
 
 <script>
 
-import {addCourse, getCourseList, getMajorList} from "../../../api/info";
+import {addCourse, deleteCourse, getCourseList, getMajorList} from "../../../api/info";
+import {MessageBox} from "element-ui";
 
 export default {
   name: "CoursePanel",
@@ -136,6 +144,21 @@ export default {
         }
       })
     },
+    handleDeleteCourse(courseRow) {
+      this.$confirm("是否删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        console.log(courseRow)
+        deleteCourse(courseRow.course_id).then(() => {
+          this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
+          getCourseList({}).then(response => {
+            this.courseList = response.data.items;
+          });
+        })
+      })
+    }
   }
 }
 </script>

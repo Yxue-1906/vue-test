@@ -18,8 +18,16 @@ export function getCourseList(filter) {
 
 export function addCourse(courseDetail) {
   return request({
-    url: 'course/add-course',
+    url: '/course/add-course',
     method: 'post',
     data: courseDetail
+  })
+}
+
+export function deleteCourse(course_id) {
+  return request({
+    url: '/course/delete-course',
+    method: 'post',
+    data: {course_id}
   })
 }

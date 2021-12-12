@@ -74,7 +74,6 @@ import {isvalidUsername} from "../../../utils/validate";
 import {addAdmin, getAdminList} from "../../../api/admin";
 
 export default {
-  label: "A",
   name: "admin-panel",
   data() {
     const validateUsername = (rule, value, callback) => {
