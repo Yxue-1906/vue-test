@@ -195,7 +195,7 @@
 <script>
 import {buySelling, addSelling, getSellingList, deleteSelling} from '../../api/trade'
 import {getCourseList, getMajorList} from "../../api/info";
-import {deleteAskingAdmin} from "../../api/admin";
+import {deleteSellingAdmin} from "../../api/admin";
 
 const defaultSellingQuery = {
   course_name: "",
@@ -378,7 +378,7 @@ export default {
             this.getList();
           })
         } else {
-          deleteAskingAdmin({Account: row.Account, course_id: row.course.course_id}).then(() => {
+          deleteSellingAdmin({Account: row.Account, course_id: row.course.course_id}).then(() => {
             this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
             this.getList();
           })
