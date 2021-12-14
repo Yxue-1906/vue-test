@@ -16,6 +16,22 @@ export function getAdminList() {
   })
 }
 
+export function deleteSellingAdmin(data) {
+  return request({
+    url: '/admin/delete-selling',
+    method: 'post',
+    data: data
+  })
+}
+
+export function deleteAskingAdmin(data) {
+  return request({
+    url: '/admin/delete-requiring',
+    method: 'post',
+    data: data
+  })
+}
+
 // export function deleteAdmin(data) {
 //   return request({
 //     url: '/admin/all-admin',

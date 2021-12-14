@@ -195,6 +195,7 @@
 <script>
 import {buySelling, addSelling, getSellingList, deleteSelling} from '../../api/trade'
 import {getCourseList, getMajorList} from "../../api/info";
+import {deleteAskingAdmin} from "../../api/admin";
 
 const defaultSellingQuery = {
   course_name: "",
@@ -371,10 +372,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteSelling({courseID: row.course.course_id}).then(() => {
-          this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
-          this.getList();
-        })
+        if (this.$store.getters.authority > 1) {
+          deleteSelling({courseID: row.course.course_id}).then(() => {
+            this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
+            this.getList();
+          })
+        } else {
+          deleteAskingAdmin({Account: row.Account, course_id: row.course.course_id}).then(() => {
+            this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
+            this.getList();
+          })
+        }
       });
     },
     handleBuy(item) {
