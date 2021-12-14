@@ -355,6 +355,7 @@ export default {
       addSelling({courseID: this.courses[0].course_id}).then(() => {
         this.addVisible = false;
         this.$message({message: "提交成功!", type: "success", duration: 2 * 1000})
+        this.searchCourseData = Object.assign({}, {});
         this.getList();
       }).catch(error => {
         this.addVisible = false;
