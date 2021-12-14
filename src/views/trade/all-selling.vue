@@ -243,10 +243,10 @@ export default {
     }
   },
   created() {
-    this.getList();
     new Promise((resolve, reject) => {
       getMajorList().then(response => {
         this.majors = response.data.items;
+        this.getList();
       })
       resolve();
     }).catch(err => {
