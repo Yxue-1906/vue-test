@@ -2,7 +2,7 @@
   <el-form :model="user" :rules="updateRules" ref="updateForm"
            label-width="130px" size="mini" class="update_form" label-position="right">
     <el-form-item label="Username">
-      <el-input v-model="user.username" :disabled="this.$store.getters.authority>1"/>
+      <el-input v-model="user.username""/>
     </el-form-item>
     <el-form-item label="Name">
       <el-input v-model="user.name"/>
