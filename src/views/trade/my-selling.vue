@@ -287,7 +287,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteSelling({courseID: row.course.course_id}).then(() => {
+        deleteSelling({courseID: row.course_id}).then(() => {
           this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
         this.getMyList()
         })

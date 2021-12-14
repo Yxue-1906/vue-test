@@ -94,7 +94,6 @@ const user = {
         } else {
           getStuInfo().then(response => {
             const data = response.data;
-            console.log(data);
             commit('SET_ACCOUNT', data.account);
             commit('SET_USERNAME', data.username);
             commit('SET_NAME', data.name)
