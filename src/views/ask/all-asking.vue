@@ -195,6 +195,7 @@
 <script>
 import {getCourseList, getMajorList} from "../../api/info";
 import {addAsking, deleteAsking, fulfillAsking, getAskingList} from "../../api/ask";
+import {deleteAskingAdmin} from "../../api/admin";
 
 const defaultAskingQuery = {
   course_name: "",
@@ -371,10 +372,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteAsking({courseID: row.course.course_id}).then(() => {
-          this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
-          this.getList();
-        })
+        if (this.$store.getters.authority > 1) {
+          deleteAsking({courseID: row.course.course_id}).then(() => {
+            this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
+            this.getList();
+          })
+        } else {
+          deleteAskingAdmin({Account: row.Account, course_id: row.course.course_id}).then(() => {
+            this.$message({message: "删除成功!", type: "success", duration: 2 * 1000})
+            this.getList();
+          });
+        }
       });
     },
     handleFulfill(item) {
